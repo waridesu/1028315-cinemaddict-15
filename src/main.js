@@ -29,14 +29,24 @@ const siteFilmTopContainerElement = document.querySelectorAll('.films-list .film
 const siteFilmMostContainerElement = document.querySelectorAll('.films-list .films-list__container')[2];
 const siteFilmButtonContainerElement = document.querySelector('.films-list');
 
-
 const FILMS_COUNT = 5;
+
 const MORE_FILMS_COUNT = 2;
 for (let i = 0; i < FILMS_COUNT ; i++) {
   render(siteFilmContainerElement, createSiteFilmCardTemplate(dataArray[i]), 'beforeend');
 }
 
 render(siteFilmButtonContainerElement, createMoreButtonTemplate(), 'beforeend');
+const moreButton = document.querySelector('.films-list__show-more');
+
+if(moreButton) {
+  moreButton.addEventListener('click',(event)=> {
+    for (let i = 4; i < 9 ; i++) {
+      render(siteFilmContainerElement, createSiteFilmCardTemplate(dataArray[i]), 'beforeend');
+    }
+    event.target.parentNode.removeChild(event.target);
+  });
+}
 
 for (let i = 0; i < MORE_FILMS_COUNT ; i++) {
   render(siteFilmTopContainerElement, createSiteFilmCardTemplate(dataArray[i]), 'beforeend');
