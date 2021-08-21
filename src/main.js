@@ -6,10 +6,13 @@ import {createSiteFilmContainerTemplate} from './view/site-film-container/site-f
 import {createSiteFilmCardTemplate} from './view/site-film-container/site-film-card/site-film-card.js';
 import {createMoreButtonTemplate} from './view/site-more-button.js';
 import {createSitePopUpTemplate} from './view/site-popup.js';
+import {generateCard} from './view/mock/card-data.js';
 
 export const render = (container, template, place) => {
   container.insertAdjacentHTML(place, template);
 };
+
+const dataArray = new Array(20).fill().map(generateCard);
 
 const siteUserAvatarElement = document.querySelector('.header');
 const siteMainElement = document.querySelector('.main');
@@ -17,7 +20,7 @@ const siteFooterSectionElement = document.querySelector('.footer__statistics');
 const siteBodyElement = document.querySelector('body');
 
 render(siteUserAvatarElement, createUserAvatarTemplate(), 'beforeend');
-render(siteMainElement, createSiteMenuTemplate(), 'beforeend');
+render(siteMainElement, createSiteMenuTemplate(dataArray.length), 'beforeend');
 render(siteMainElement, createSortTemplate(), 'beforeend');
 render(siteMainElement, createSiteFilmContainerTemplate(), 'beforeend');
 
@@ -30,17 +33,17 @@ const siteFilmButtonContainerElement = document.querySelector('.films-list');
 const FILMS_COUNT = 5;
 const MORE_FILMS_COUNT = 2;
 for (let i = 0; i < FILMS_COUNT ; i++) {
-  render(siteFilmContainerElement, createSiteFilmCardTemplate(), 'beforeend');
+  render(siteFilmContainerElement, createSiteFilmCardTemplate(dataArray[i]), 'beforeend');
 }
 
 render(siteFilmButtonContainerElement, createMoreButtonTemplate(), 'beforeend');
 
 for (let i = 0; i < MORE_FILMS_COUNT ; i++) {
-  render(siteFilmTopContainerElement, createSiteFilmCardTemplate(), 'beforeend');
+  render(siteFilmTopContainerElement, createSiteFilmCardTemplate(dataArray[i]), 'beforeend');
 }
 for (let i = 0; i < MORE_FILMS_COUNT ; i++) {
-  render(siteFilmMostContainerElement, createSiteFilmCardTemplate(), 'beforeend');
+  render(siteFilmMostContainerElement, createSiteFilmCardTemplate(dataArray[i]), 'beforeend');
 }
 
-render(siteFooterSectionElement, createFooterTemplate(), 'beforeend');
-render(siteBodyElement, createSitePopUpTemplate(), 'beforeend');
+render(siteFooterSectionElement, createFooterTemplate(dataArray.length), 'beforeend');
+render(siteBodyElement, createSitePopUpTemplate(dataArray[8]), 'beforeend');

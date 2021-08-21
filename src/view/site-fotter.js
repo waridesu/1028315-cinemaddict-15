@@ -1,4 +1,4 @@
-export const createFooterTemplate = () => (
+export const createFooterTemplate = (number) => (
   `<section class="footer__statistics">
-    <p>130 291 movies inside</p>
+    <p>${number} movies inside</p>
   </section>`);
