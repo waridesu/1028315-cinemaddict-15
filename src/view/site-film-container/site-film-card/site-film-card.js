@@ -2,8 +2,8 @@
 export const createSiteFilmCardTemplate = (card) => {
   const {poster, filmName, rating, filmYear, filmLength, filmGenre, description, comments} = card;
   let commentsNumber = 0;
-  if (Array.from(comments).length) {
-    commentsNumber = Array.from(comments).length;
+  if (comments.length) {
+    commentsNumber = comments.length;
   }
   return `<article class="film-card">
           <h3 class="film-card__title">${filmName}</h3>
@@ -11,7 +11,7 @@ export const createSiteFilmCardTemplate = (card) => {
           <p class="film-card__info">
             <span class="film-card__year">${filmYear}</span>
             <span class="film-card__duration">${filmLength}</span>
-            <span class="film-card__genre">${filmGenre}</span>
+            <span class="film-card__genre">${filmGenre.length ? filmGenre[0] : 'No specific genre'}</span>
           </p>
           <img src="${poster}" alt="" class="film-card__poster">
           <p class="film-card__description">${description}</p>

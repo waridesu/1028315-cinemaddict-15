@@ -1,8 +1,11 @@
+import {createSiteCommentTemplate} from './site-comment';
+import {createSiteGeneresTemplate} from './site-geners';
+
 export const createSitePopUpTemplate = (card) => {
   const {poster, filmName, rating, filmYear, filmLength, filmGenre, description, comments} = card;
   let commentsNumber = 0;
-  if (Array.from(comments).length) {
-    commentsNumber = Array.from(comments).length;
+  if (comments.length) {
+    commentsNumber = comments.length;
   }
   return `<section class="film-details">
   <form class="film-details__inner" action="" method="get">
@@ -57,9 +60,7 @@ export const createSitePopUpTemplate = (card) => {
             <tr class="film-details__row">
               <td class="film-details__term">Genres</td>
               <td class="film-details__cell">
-                <span class="film-details__genre">${filmGenre}</span>
-                <span class="film-details__genre">Film-Noir</span>
-                <span class="film-details__genre">Mystery</span></td>
+                ${createSiteGeneresTemplate(filmGenre)}
             </tr>
           </table>
 
@@ -81,22 +82,7 @@ export const createSitePopUpTemplate = (card) => {
         <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${commentsNumber}</span></h3>
 
         <ul class="film-details__comments-list">
-        ${Array.from(comments).map((element) => `<li class="film-details__comment">
-            ${element.emoji ? `<span class="film-details__comment-emoji">
-              <img src="${element.emoji}" width="55" height="55" alt="emoji-smile">
-            </span>` : `<span class="film-details__comment-emoji">
-                        <div style="width: 55px; height: 55px"></div>
-                        </span>`}
-            <div>
-              <p class="film-details__comment-text">${element.text}</p>
-              <p class="film-details__comment-info">
-                <span class="film-details__comment-author">${element.author}</span>
-                <span class="film-details__comment-day">${element.commentaryDate}</span>
-                <button class="film-details__comment-delete">Delete</button>
-              </p>
-            </div>
-          </li>`).join('')}
-
+        ${createSiteCommentTemplate(comments)}
         </ul>
 
         <div class="film-details__new-comment">

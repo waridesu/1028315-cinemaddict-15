@@ -4,6 +4,10 @@ const getRandomInteger = (a = 0, b = 1) => {
 
   return Math.floor(lower + Math.random() * (upper - lower + 1));
 };
+const getRandomArrayElement = (arr) => {
+  const randomIndex = getRandomInteger(0, arr.length - 1);
+  return arr[randomIndex];
+};
 
 const generatePosterUrl = () => {
   const posterUrls = [
@@ -16,9 +20,7 @@ const generatePosterUrl = () => {
     './images/posters/the-man-with-the-golden-arm.jpg',
   ];
 
-  const randomIndex = getRandomInteger(0, posterUrls.length - 1);
-
-  return posterUrls[randomIndex];
+  return getRandomArrayElement(posterUrls);
 };
 
 const generateFilmName = () => {
@@ -32,9 +34,7 @@ const generateFilmName = () => {
     'The man with the golden-arm',
   ];
 
-  const randomIndex = getRandomInteger(0, filmNames.length - 1);
-
-  return filmNames[randomIndex];
+  return getRandomArrayElement(filmNames);
 };
 
 const generateRating = () => getRandomInteger(0, 10);
@@ -50,9 +50,7 @@ const generateFilmYear = () => {
     '1964',
   ];
 
-  const randomIndex = getRandomInteger(0, filmYears.length - 1);
-
-  return filmYears[randomIndex];
+  return getRandomArrayElement(filmYears);
 };
 
 const generateFilmLength = () => {
@@ -66,9 +64,7 @@ const generateFilmLength = () => {
     '1h 21m',
   ];
 
-  const randomIndex = getRandomInteger(0, filmLengths.length - 1);
-
-  return filmLengths[randomIndex];
+  return getRandomArrayElement(filmLengths);
 };
 
 const generateFilmGenre = () => {
@@ -84,7 +80,7 @@ const generateFilmGenre = () => {
 
   const randomIndex = getRandomInteger(0, filmGenres.length - 1);
 
-  return filmGenres [randomIndex];
+  return filmGenres.slice(0, randomIndex);
 };
 
 const generateDescription = () => {
@@ -96,9 +92,7 @@ const generateDescription = () => {
     'Phasellus eros mauris, condimentum sed nibh vitae, sodales efficitur ipsum. Sed blandit, eros vel aliquam faucibus, purus ex euismod diam, eu luctus nunc ante ut dui.',
   ];
 
-  const randomIndex = getRandomInteger(0, descriptions.length - 1);
-
-  return descriptions[randomIndex];
+  return getRandomArrayElement(descriptions);
 };
 
 const generateComments = () => {
@@ -124,4 +118,9 @@ export const generateCard = () => ({
   filmGenre: generateFilmGenre(),
   description: generateDescription(),
   comments: generateComments(),
+  'user_details': {
+    'watchlist': !Math.round(Math.random()),
+    'already_watched': !Math.round(Math.random()),
+    'favorite': !Math.round(Math.random()),
+  },
 });
