@@ -15,11 +15,37 @@ const siteBodyElement = document.querySelector('body');
 const renderTask = (filmListElement, task) => {
   const filmComponent = new SiteFilmCardView(task);
   const filmPopUpComponent = new SiteSitePopUpView(task);
+  /*  const replace = (newChild, oldChild) => {
+    if (oldChild instanceof filmPopUpComponent) {
+      oldChild = oldChild.getElement();
+    }
 
-  filmComponent.getElement().addEventListener('click', ()=>
-    renderElement(siteBodyElement, filmPopUpComponent.getElement(), RenderPosition.BEFOREEND));
+    if (newChild instanceof filmPopUpComponent) {
+      newChild = newChild.getElement();
+    }
+
+    const parent = oldChild.parentElement;
+
+    if (parent === null || newChild === null) {
+      throw new Error('Can\'t replace unexisting elements');
+    }
+
+    parent.replaceChild(newChild, oldChild);
+  };*/
+  filmComponent.getElement().addEventListener('click', ()=>{
+    /*    if (document.querySelector('.film-details')) {
+      replace(filmComponent, filmComponent);
+    } else {
+      renderElement(siteBodyElement, filmPopUpComponent.getElement(), RenderPosition.BEFOREEND);
+    }*/
+    renderElement(siteBodyElement, filmPopUpComponent.getElement(), RenderPosition.BEFOREEND);
+  });
+
   filmPopUpComponent.getElement().querySelector('.film-details__close-btn')
-    .addEventListener('click', ()=> filmPopUpComponent.getElement().remove());
+    .addEventListener('click', ()=> {
+      filmPopUpComponent.getElement().remove();
+    });
+
   renderElement(filmListElement, filmComponent.getElement(), RenderPosition.BEFOREEND);
 
 };

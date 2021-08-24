@@ -138,6 +138,10 @@ export default class createSitePopUp {
     return this._element;
   }
 
+  setData(card) {
+    return  this._data = card;
+  }
+
   removeElement() {
     this._element= null;
   }
