@@ -3,13 +3,13 @@ export const createSiteMenuTemplate = (number, details) => {
   let history = 0;
   let favorite = 0;
   details.forEach((element) => {
-    if (element.user_details.watchlist === true) {
+    if (element.user_details.watchlist) {
       watchList += 1;
     }
-    if (element.user_details.already_watched === true) {
+    if (element.user_details.already_watched) {
       history += 1;
     }
-    if (element.user_details.favorite === true) {
+    if (element.user_details.favorite) {
       favorite += 1;
     }
   });
