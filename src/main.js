@@ -16,8 +16,10 @@ const renderTask = (filmListElement, task) => {
   const filmComponent = new SiteFilmCardView(task);
   const filmPopUpComponent = new SiteSitePopUpView(task);
 
-  filmComponent.getElement().addEventListener('click', ()=> renderElement(siteBodyElement, filmPopUpComponent.getElement(), RenderPosition.BEFOREEND));
-  filmPopUpComponent.getElement().querySelector('.film-details__close-btn').addEventListener('click', ()=> filmPopUpComponent.removeElement());
+  filmComponent.getElement().addEventListener('click', ()=>
+    renderElement(siteBodyElement, filmPopUpComponent.getElement(), RenderPosition.BEFOREEND));
+  filmPopUpComponent.getElement().querySelector('.film-details__close-btn')
+    .addEventListener('click', ()=> filmPopUpComponent.getElement().remove());
   renderElement(filmListElement, filmComponent.getElement(), RenderPosition.BEFOREEND);
 
 };
