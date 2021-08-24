@@ -1,7 +1,8 @@
 import {createSiteCommentTemplate} from './site-comment';
 import {createSiteGeneresTemplate} from './site-geners';
+import {createElement} from '../utils/utils';
 
-export const createSitePopUpTemplate = (card) => {
+const createSitePopUpTemplate = (card) => {
   const {poster, filmName, rating, filmYear, filmLength, filmGenre, description, comments} = card;
   let commentsNumber = 0;
   if (comments.length) {
@@ -119,3 +120,25 @@ export const createSitePopUpTemplate = (card) => {
   </form>
 </section>`;
 };
+
+export default class createSitePopUp {
+  constructor(card) {
+    this._data = card;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createSitePopUpTemplate(this._data);
+  }
+
+  getElement() {
+    if(!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+    return this._element;
+  }
+
+  removeElement() {
+    this._element= null;
+  }
+}

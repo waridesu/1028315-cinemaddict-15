@@ -1,15 +1,25 @@
-import {createUserAvatarTemplate} from './view/user-avatar.js';
-import {createSiteMenuTemplate} from './view/site-menu.js';
-import {createSortTemplate} from './view/site-sort.js';
-import {createFooterTemplate} from './view/site-fotter.js';
-import {createSiteFilmContainerTemplate} from './view/site-film-container/site-film-container.js';
-import {createSiteFilmCardTemplate} from './view/site-film-container/site-film-card/site-film-card.js';
-import {createMoreButtonTemplate} from './view/site-more-button.js';
-import {createSitePopUpTemplate} from './view/site-popout/site-popup.js';
-import {generateCard} from './view/mock/card-data.js';
+import SiteAvatarView from './view/user-avatar.js';
+import SiteMenuView from './view/site-menu.js';
+import SiteSortView from './view/site-sort.js';
+import SiteFooterView from './view/site-fotter.js';
+import SiteFilmContainerView from './view/site-film-container/site-film-container.js';
+import SiteFilmCardView from './view/site-film-container/site-film-card/site-film-card.js';
+import SiteMoreButtonView from './view/site-more-button.js';
+import SiteSitePopUpView from './view/site-popout/site-popup.js';
+import SiteFilmListView from './view/site-film-container/film-list/film-list.js';
+import { generateCard } from './view/mock/card-data.js';
+import { renderElement, RenderPosition } from './view/utils/utils.js';
 
-export const render = (container, template, place) => {
-  container.insertAdjacentHTML(place, template);
+const siteBodyElement = document.querySelector('body');
+
+const renderTask = (filmListElement, task) => {
+  const filmComponent = new SiteFilmCardView(task);
+  const filmPopUpComponent = new SiteSitePopUpView(task);
+
+  filmComponent.getElement().addEventListener('click', ()=> renderElement(siteBodyElement, filmPopUpComponent.getElement(), RenderPosition.BEFOREEND));
+  filmPopUpComponent.getElement().querySelector('.film-details__close-btn').addEventListener('click', ()=> filmPopUpComponent.removeElement());
+  renderElement(filmListElement, filmComponent.getElement(), RenderPosition.BEFOREEND);
+
 };
 
 const FILM_COUNT_PER_STEP = 5;
@@ -18,28 +28,28 @@ const dataArray = new Array(20).fill().map(generateCard);
 const siteUserAvatarElement = document.querySelector('.header');
 const siteMainElement = document.querySelector('.main');
 const siteFooterSectionElement = document.querySelector('.footer__statistics');
-const siteBodyElement = document.querySelector('body');
 
-render(siteUserAvatarElement, createUserAvatarTemplate(), 'beforeend');
-render(siteMainElement, createSiteMenuTemplate(dataArray.length, dataArray), 'beforeend');
-render(siteMainElement, createSortTemplate(), 'beforeend');
-render(siteMainElement, createSiteFilmContainerTemplate(), 'beforeend');
+renderElement(siteUserAvatarElement, new SiteAvatarView().getElement(), RenderPosition.BEFOREEND);
+renderElement(siteMainElement, new SiteMenuView(dataArray.length, dataArray).getElement(), RenderPosition.BEFOREEND);
+renderElement(siteMainElement, new SiteSortView().getElement(), RenderPosition.BEFOREEND);
+renderElement(siteMainElement, new SiteFilmContainerView().getElement(), RenderPosition.BEFOREEND);
 
-const siteFilmContainerElement = document.querySelectorAll('.films-list .films-list__container')[0];
-const siteFilmTopContainerElement = document.querySelectorAll('.films-list .films-list__container')[1];
-const siteFilmMostContainerElement = document.querySelectorAll('.films-list .films-list__container')[2];
+const siteFilmTopContainerElement = document.querySelectorAll('.films-list .films-list__container')[0];
+const siteFilmMostContainerElement = document.querySelectorAll('.films-list .films-list__container')[1];
 const siteFilmButtonContainerElement = document.querySelector('.films-list');
+
+const filmListComponent = new SiteFilmListView();
+renderElement(siteFilmButtonContainerElement, filmListComponent.getElement(), RenderPosition.BEFOREEND);
 
 const MORE_FILMS_COUNT = 2;
 for (let index = 0; index<Math.min(dataArray.length, FILM_COUNT_PER_STEP); index++) {
-  render(siteFilmContainerElement, createSiteFilmCardTemplate(dataArray[index]), 'beforeend');
+  renderTask(filmListComponent.getElement(), dataArray[index]);
 }
-
 
 if (dataArray.length > FILM_COUNT_PER_STEP) {
   let renderCardCount = FILM_COUNT_PER_STEP;
 
-  render(siteFilmButtonContainerElement, createMoreButtonTemplate(), 'beforeend');
+  renderElement(siteFilmButtonContainerElement, new SiteMoreButtonView().getElement(), RenderPosition.BEFOREEND);
 
   const moreButton = document.querySelector('.films-list__show-more');
 
@@ -48,7 +58,7 @@ if (dataArray.length > FILM_COUNT_PER_STEP) {
       event.preventDefault();
       dataArray
         .slice(renderCardCount, renderCardCount + FILM_COUNT_PER_STEP)
-        .forEach((card) => render(siteFilmContainerElement, createSiteFilmCardTemplate(card), 'beforeend'));
+        .forEach((card) => renderTask(filmListComponent.getElement(), card));
 
       renderCardCount += FILM_COUNT_PER_STEP;
       if (renderCardCount >= dataArray.length) {
@@ -59,11 +69,12 @@ if (dataArray.length > FILM_COUNT_PER_STEP) {
 }
 
 for (let i = 0; i < MORE_FILMS_COUNT; i++) {
-  render(siteFilmTopContainerElement, createSiteFilmCardTemplate(dataArray[i]), 'beforeend');
+  renderTask(siteFilmTopContainerElement, dataArray[i]);
 }
 for (let i = 0; i < MORE_FILMS_COUNT; i++) {
-  render(siteFilmMostContainerElement, createSiteFilmCardTemplate(dataArray[i]), 'beforeend');
+  renderTask(siteFilmMostContainerElement, dataArray[i]);
+  // renderElement(siteFilmMostContainerElement, new SiteFilmCardView(dataArray[i]).getElement(), RenderPosition.BEFOREEND);
 }
 
-render(siteFooterSectionElement, createFooterTemplate(dataArray.length), 'beforeend');
-render(siteBodyElement, createSitePopUpTemplate(dataArray[Math.floor(Math.random()* (dataArray.length - 1) + 1)]), 'beforeend');
+renderElement(siteFooterSectionElement, new SiteFooterView(dataArray.length).getElement(), RenderPosition.BEFOREEND);
+// renderElement(siteBodyElement, new SiteSitePopUpView(dataArray[Math.floor(Math.random()* (dataArray.length - 1) + 1)]).getElement(), RenderPosition.BEFOREEND);
