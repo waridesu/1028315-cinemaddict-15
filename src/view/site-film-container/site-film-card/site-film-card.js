@@ -1,5 +1,6 @@
+import {createElement} from '../../utils/utils';
 
-export const createSiteFilmCardTemplate = (card) => {
+const createSiteFilmCardTemplate = (card) => {
   const {poster, filmName, rating, filmYear, filmLength, filmGenre, description, comments} = card;
   let commentsNumber = 0;
   if (comments.length) {
@@ -23,3 +24,25 @@ export const createSiteFilmCardTemplate = (card) => {
           </div>
         </article>`;
 };
+
+export default class FilmCard {
+  constructor(card) {
+    this._card = card;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createSiteFilmCardTemplate(this._card);
+  }
+
+  getElement() {
+    if(!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+    return this._element;
+  }
+
+  removeElement() {
+    this._element= null;
+  }
+}

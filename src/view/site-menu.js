@@ -1,4 +1,6 @@
-export const createSiteMenuTemplate = (number, details) => {
+import {createElement} from './utils/utils';
+
+const createSiteMenuTemplate = (number, details) => {
   let watchList = 0;
   let history = 0;
   let favorite = 0;
@@ -24,3 +26,26 @@ export const createSiteMenuTemplate = (number, details) => {
     <a href="#stats" class="main-navigation__additional">Stats</a>
   </nav>`;
 };
+
+export default class Menu {
+  constructor(number, details) {
+    this._number = number;
+    this._details = details;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createSiteMenuTemplate(this._number, this._details);
+  }
+
+  getElement() {
+    if(!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+    return this._element;
+  }
+
+  removeElement() {
+    this._element= null;
+  }
+}
