@@ -9,6 +9,7 @@ import SiteSitePopUpView from './view/site-popout/site-popup.js';
 import SiteFilmListView from './view/site-film-container/film-list/film-list.js';
 import { generateCard } from './view/mock/card-data.js';
 import { renderElement, RenderPosition } from './view/utils/utils.js';
+import ListEmptyView from './view/site-film-container/list-empty.js';
 
 const siteBodyElement = document.querySelector('body');
 
@@ -19,6 +20,7 @@ const closePopUpComponent = ()=> {
   document.body.classList.remove('hide-overflow');
   popUpComponent = null;
 };
+document.addEventListener('keyup', closePopUpComponent);
 const openPopUpComponent = (task) => {
   if (popUpComponent) {
     closePopUpComponent();
@@ -39,7 +41,6 @@ const renderTask = (filmListElement, task) => {
   renderElement(filmListElement, filmComponent.getElement(), RenderPosition.BEFOREEND);
 
 };
-
 const FILM_COUNT_PER_STEP = 5;
 const dataArray = new Array(20).fill().map(generateCard);
 
@@ -63,6 +64,13 @@ const MORE_FILMS_COUNT = 2;
 for (let index = 0; index<Math.min(dataArray.length, FILM_COUNT_PER_STEP); index++) {
   renderTask(filmListComponent.getElement(), dataArray[index]);
 }
+
+document.querySelector('.main-navigation').addEventListener('click', (event) => event.forEach((element)=>{
+  if(element.target === document.querySelector('.main-navigation__item')) {
+    filmListComponent.getElement().remove();
+    renderElement(this, new ListEmptyView(element.target.value).getElement(), RenderPosition.BEFOREEND);
+  }
+}));
 
 if (dataArray.length > FILM_COUNT_PER_STEP) {
   let renderCardCount = FILM_COUNT_PER_STEP;
