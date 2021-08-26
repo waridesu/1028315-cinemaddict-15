@@ -12,33 +12,30 @@ import { renderElement, RenderPosition } from './view/utils/utils.js';
 
 const siteBodyElement = document.querySelector('body');
 
+let popUpComponent;
+
+const closePopUpComponent = ()=> {
+  popUpComponent.getElement().remove();
+  document.body.classList.remove('hide-overflow');
+  popUpComponent = null;
+};
+const openPopUpComponent = (task) => {
+  document.body.classList.add('hide-overflow');
+
+  if (popUpComponent) {
+    closePopUpComponent();
+  }
+  popUpComponent = new SiteSitePopUpView(task);
+  renderElement(siteBodyElement, popUpComponent.getElement(), RenderPosition.BEFOREEND);
+  popUpComponent.getElement().querySelector('.film-details__close-btn')
+    .addEventListener('click', closePopUpComponent);
+};
 const renderTask = (filmListElement, task) => {
   const filmComponent = new SiteFilmCardView(task);
   const filmPopUpComponent = new SiteSitePopUpView(task);
-  /*  const replace = (newChild, oldChild) => {
-    if (oldChild instanceof filmPopUpComponent) {
-      oldChild = oldChild.getElement();
-    }
 
-    if (newChild instanceof filmPopUpComponent) {
-      newChild = newChild.getElement();
-    }
-
-    const parent = oldChild.parentElement;
-
-    if (parent === null || newChild === null) {
-      throw new Error('Can\'t replace unexisting elements');
-    }
-
-    parent.replaceChild(newChild, oldChild);
-  };*/
-  filmComponent.getElement().addEventListener('click', ()=>{
-    /*    if (document.querySelector('.film-details')) {
-      replace(filmComponent, filmComponent);
-    } else {
-      renderElement(siteBodyElement, filmPopUpComponent.getElement(), RenderPosition.BEFOREEND);
-    }*/
-    renderElement(siteBodyElement, filmPopUpComponent.getElement(), RenderPosition.BEFOREEND);
+  filmComponent.getElement().addEventListener('click', ()=> {
+    openPopUpComponent(task);
   });
 
   filmPopUpComponent.getElement().querySelector('.film-details__close-btn')
@@ -101,8 +98,6 @@ for (let i = 0; i < MORE_FILMS_COUNT; i++) {
 }
 for (let i = 0; i < MORE_FILMS_COUNT; i++) {
   renderTask(siteFilmMostContainerElement, dataArray[i]);
-  // renderElement(siteFilmMostContainerElement, new SiteFilmCardView(dataArray[i]).getElement(), RenderPosition.BEFOREEND);
 }
 
 renderElement(siteFooterSectionElement, new SiteFooterView(dataArray.length).getElement(), RenderPosition.BEFOREEND);
-// renderElement(siteBodyElement, new SiteSitePopUpView(dataArray[Math.floor(Math.random()* (dataArray.length - 1) + 1)]).getElement(), RenderPosition.BEFOREEND);
