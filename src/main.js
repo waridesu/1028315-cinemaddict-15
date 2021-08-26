@@ -20,7 +20,10 @@ const closePopUpComponent = ()=> {
   document.body.classList.remove('hide-overflow');
   popUpComponent = null;
 };
-document.addEventListener('keyup', closePopUpComponent);
+document.addEventListener('keyup', (event)=>{
+  if((event.key === 'Escape'||event.key === 'Esc'||event.keyCode === 27) && (event.target.nodeName === 'BODY')){
+    closePopUpComponent();
+  }});
 const openPopUpComponent = (task) => {
   if (popUpComponent) {
     closePopUpComponent();
