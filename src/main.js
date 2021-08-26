@@ -90,6 +90,9 @@ if (dataArray.length > FILM_COUNT_PER_STEP) {
       if (renderCardCount >= dataArray.length) {
         moreButton.remove();
       }
+      if(!dataArray.length) {
+        renderElement(siteFilmButtonContainerElement, new ListEmptyView('There are no movies in our database').getElement(), RenderPosition.BEFOREEND);
+      }
     });
   }
 }
