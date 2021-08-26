@@ -21,7 +21,7 @@ const closePopUpComponent = ()=> {
   popUpComponent = null;
 };
 document.addEventListener('keyup', (event)=>{
-  if((event.key === 'Escape'||event.key === 'Esc'||event.keyCode === 27) && (event.target.nodeName === 'BODY')){
+  if((event.key === 'Escape'|| event.key === 'Esc'|| event.keyCode === 27) && (event.target.nodeName === 'BODY')){
     closePopUpComponent();
   }});
 const openPopUpComponent = (task) => {
