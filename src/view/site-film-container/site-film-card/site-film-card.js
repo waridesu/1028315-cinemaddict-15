@@ -25,7 +25,7 @@ const createSiteFilmCardTemplate = (card) => {
         </article>`;
 };
 
-export default class createSiteFilmCard {
+export default class FilmCard {
   constructor(card) {
     this._card = card;
     this._element = null;

@@ -3,7 +3,7 @@ import {createElement} from './utils/utils';
 const createMoreButtonTemplate = () =>
   '<button class="films-list__show-more">Show more</button>';
 
-export default class createMoreButton {
+export default class Button {
   constructor() {
     this._element = null;
   }

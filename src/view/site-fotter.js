@@ -5,7 +5,7 @@ const createFooterTemplate = (number) =>
     <p>${number} movies inside</p>
   </section>`;
 
-export default class createFooter {
+export default class Footer {
   constructor(number) {
     this._number = number;
     this._element = null;

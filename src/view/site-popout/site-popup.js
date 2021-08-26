@@ -121,7 +121,7 @@ const createSitePopUpTemplate = (card) => {
 </section>`;
 };
 
-export default class createSitePopUp {
+export default class PopUp {
   constructor(card) {
     this._data = card;
     this._element = null;

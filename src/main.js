@@ -31,16 +31,10 @@ const openPopUpComponent = (task) => {
 };
 const renderTask = (filmListElement, task) => {
   const filmComponent = new SiteFilmCardView(task);
-  const filmPopUpComponent = new SiteSitePopUpView(task);
 
   filmComponent.getElement().addEventListener('click', ()=> {
     openPopUpComponent(task);
   });
-
-  filmPopUpComponent.getElement().querySelector('.film-details__close-btn')
-    .addEventListener('click', ()=> {
-      filmPopUpComponent.getElement().remove();
-    });
 
   renderElement(filmListElement, filmComponent.getElement(), RenderPosition.BEFOREEND);
 

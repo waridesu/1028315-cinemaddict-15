@@ -8,7 +8,7 @@ const createSortTemplate = () => (
   </ul>`
 );
 
-export default class createUserAvatar {
+export default class Sort {
   constructor() {
     this._element = null;
   }

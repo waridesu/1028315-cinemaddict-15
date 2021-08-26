@@ -27,7 +27,7 @@ const createSiteMenuTemplate = (number, details) => {
   </nav>`;
 };
 
-export default class createSiteMenu {
+export default class Menu {
   constructor(number, details) {
     this._number = number;
     this._details = details;

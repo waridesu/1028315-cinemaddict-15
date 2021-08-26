@@ -7,7 +7,7 @@ const createUserAvatarTemplate = () => (
   </section>`
 );
 
-export default class createUserAvatar {
+export default class Avatar {
   constructor() {
     this._element = null;
   }

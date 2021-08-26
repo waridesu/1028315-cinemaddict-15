@@ -23,7 +23,7 @@ const createSiteFilmContainerTemplate = () => (
     </section>
     </section>`);
 
-export default class createSiteFilmContainer {
+export default class FilmContainer {
   constructor() {
     this._element = null;
   }

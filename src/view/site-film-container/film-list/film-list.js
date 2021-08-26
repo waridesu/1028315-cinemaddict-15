@@ -2,7 +2,7 @@ import {createElement} from '../../utils/utils';
 
 const createFilmListTemplate = () => '<div class="films-list__container"></div>';
 
-export default class createFilmList {
+export default class FilmList {
   constructor() {
     this._element = null;
   }
