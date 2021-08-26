@@ -20,11 +20,10 @@ const closePopUpComponent = ()=> {
   popUpComponent = null;
 };
 const openPopUpComponent = (task) => {
-  document.body.classList.add('hide-overflow');
-
   if (popUpComponent) {
     closePopUpComponent();
   }
+  document.body.classList.add('hide-overflow');
   popUpComponent = new SiteSitePopUpView(task);
   renderElement(siteBodyElement, popUpComponent.getElement(), RenderPosition.BEFOREEND);
   popUpComponent.getElement().querySelector('.film-details__close-btn')
