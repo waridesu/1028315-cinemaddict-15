@@ -16,8 +16,8 @@ const siteBodyElement = document.querySelector('body');
 let popUpComponent;
 
 const closePopUpComponent = () => {
-  popUpComponent.getElement().querySelector('.film-details__close-btn')
-    .removeEventListener('click', closePopUpComponent);
+  // eslint-disable-next-line no-use-before-define
+  document.removeEventListener('keyup', onEscKeyUp);
   popUpComponent.getElement().remove();
   document.body.classList.remove('hide-overflow');
   popUpComponent = null;
