@@ -21,7 +21,6 @@ const closePopUpComponent = () => {
   popUpComponent.getElement().querySelector('.film-details__close-btn')
     .removeEventListener('click', closePopUpComponent);
   popUpComponent = null;
-
 };
 
 const onEscKeyUp = (event) => {
