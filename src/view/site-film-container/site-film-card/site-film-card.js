@@ -1,7 +1,7 @@
 import {createElement} from '../../utils/utils';
 
-const createSiteFilmCardTemplate = (card) => {
-  const {poster, filmName, rating, filmYear, filmLength, filmGenre, description, comments} = card;
+const createSiteFilmCardTemplate = (card = {}) => {
+  const {poster, filmName, rating, filmYear, filmLength, filmGenre = '', description, comments = ''} = card;
   let commentsNumber = 0;
   if (comments.length) {
     commentsNumber = comments.length;
@@ -36,13 +36,13 @@ export default class FilmCard {
   }
 
   getElement() {
-    if(!this._element) {
+    if (!this._element) {
       this._element = createElement(this.getTemplate());
     }
     return this._element;
   }
 
   removeElement() {
-    this._element= null;
+    this._element = null;
   }
 }

@@ -16,8 +16,6 @@ const siteBodyElement = document.querySelector('body');
 let popUpComponent;
 
 const closePopUpComponent = () => {
-  document.removeEventListener('keyup', () => {
-  });
   popUpComponent.getElement().remove();
   document.body.classList.remove('hide-overflow');
   popUpComponent = null;
@@ -102,6 +100,7 @@ if (dataArray.length > FILM_COUNT_PER_STEP) {
 if (!dataArray.length) {
   renderElement(siteFilmButtonContainerElement, new ListEmptyView('There are no movies in our database').getElement(), RenderPosition.BEFOREEND);
   document.querySelectorAll('.films-list--extra').forEach((element) => element.remove());
+  document.querySelector('.sort').remove();
 }
 
 for (let i = 0; i < MORE_FILMS_COUNT; i++) {
