@@ -16,8 +16,6 @@ const siteBodyElement = document.querySelector('body');
 let popUpComponent;
 
 const closePopUpComponent = () => {
-  // eslint-disable-next-line no-use-before-define
-  document.removeEventListener('keyup', onEscKeyUp);
   popUpComponent.getElement().remove();
   document.body.classList.remove('hide-overflow');
   popUpComponent = null;
@@ -40,7 +38,10 @@ const openPopUpComponent = (task) => {
   popUpComponent = new SiteSitePopUpView(task);
   renderElement(siteBodyElement, popUpComponent.getElement(), RenderPosition.BEFOREEND);
   popUpComponent.getElement().querySelector('.film-details__close-btn')
-    .addEventListener('click', closePopUpComponent);
+    .addEventListener('click', () => {
+      document.removeEventListener('keyup', onEscKeyUp);
+      closePopUpComponent();
+    });
 };
 
 const renderTask = (filmListElement, task) => {
@@ -73,7 +74,7 @@ renderElement(siteFilmButtonContainerElement, filmListComponent.getElement(), Re
 
 const MORE_FILMS_COUNT = 2;
 
-if(dataArray.length) {
+if (dataArray.length) {
   for (let index = 0; index < Math.min(dataArray.length, FILM_COUNT_PER_STEP); index++) {
     renderTask(filmListComponent.getElement(), dataArray[index]);
   }
