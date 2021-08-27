@@ -16,10 +16,10 @@ const siteBodyElement = document.querySelector('body');
 let popUpComponent;
 
 const closePopUpComponent = () => {
-  popUpComponent.getElement().remove();
-  document.body.classList.remove('hide-overflow');
   popUpComponent.getElement().querySelector('.film-details__close-btn')
     .removeEventListener('click', closePopUpComponent);
+  popUpComponent.getElement().remove();
+  document.body.classList.remove('hide-overflow');
   popUpComponent = null;
 };
 
