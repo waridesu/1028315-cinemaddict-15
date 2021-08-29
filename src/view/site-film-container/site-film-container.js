@@ -23,7 +23,7 @@ const createSiteFilmContainerTemplate = () => (
     </section>
     </section>`);
 
-export default class FilmContainer extends AbstractView{
+export default class FilmContainer extends AbstractView {
   getTemplate() {
     return createSiteFilmContainerTemplate();
   }

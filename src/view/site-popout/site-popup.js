@@ -121,24 +121,24 @@ const createSitePopUpTemplate = (card) => {
 </section>`;
 };
 
-export default class PopUp extends AbstractView{
+export default class PopUp extends AbstractView {
   constructor(card) {
     super();
     this._data = card;
-    this._formSubmitHandler = this._formSubmitHandler.bind(this);
+    this._clickHandler = this._clickHandler.bind(this);
   }
 
   getTemplate() {
     return createSitePopUpTemplate(this._data);
   }
 
-  _formSubmitHandler(evt) {
+  _clickHandler(evt) {
     evt.preventDefault();
     this._callback.click();
   }
 
   setCloseButtonHandler(callback) {
     this._callback.click = callback;
-    this.getElement().querySelector('.film-details__close-btn').addEventListener('click', this._formSubmitHandler);
+    this.getElement().querySelector('.film-details__close-btn').addEventListener('click', this._clickHandler);
   }
 }

@@ -27,7 +27,7 @@ const createSiteMenuTemplate = (number, details) => {
   </nav>`;
 };
 
-export default class Menu extends AbstractView{
+export default class Menu extends AbstractView {
   constructor(number, details) {
     super();
     this._number = number;

@@ -7,7 +7,7 @@ const createUserAvatarTemplate = () => (
   </section>`
 );
 
-export default class Avatar extends AbstractView{
+export default class Avatar extends AbstractView {
   getTemplate() {
     return createUserAvatarTemplate();
   }

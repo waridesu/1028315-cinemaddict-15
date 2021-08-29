@@ -5,7 +5,7 @@ const createFooterTemplate = (number) =>
     <p>${number} movies inside</p>
   </section>`;
 
-export default class Footer extends  AbstractView{
+export default class Footer extends  AbstractView {
   constructor(number) {
     super();
     this._number = number;

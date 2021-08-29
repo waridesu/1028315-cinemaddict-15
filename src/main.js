@@ -91,21 +91,20 @@ if (dataArray.length) {
 
 if (dataArray.length > FILM_COUNT_PER_STEP) {
   let renderCardCount = FILM_COUNT_PER_STEP;
+  const moreButton = new SiteMoreButtonView();
+  render(siteFilmButtonContainerElement, moreButton, RenderPosition.BEFOREEND);
 
-  render(siteFilmButtonContainerElement, new SiteMoreButtonView(), RenderPosition.BEFOREEND);
-
-  const moreButton = document.querySelector('.films-list__show-more');
+  // const moreButton = document.querySelector('.films-list__show-more');
 
   if (moreButton) {
-    moreButton.addEventListener('click', (event) => {
-      event.preventDefault();
+    moreButton.setClickHandler(() => {
       dataArray
         .slice(renderCardCount, renderCardCount + FILM_COUNT_PER_STEP)
         .forEach((card) => renderTask(filmListComponent, card));
 
       renderCardCount += FILM_COUNT_PER_STEP;
       if (renderCardCount >= dataArray.length) {
-        moreButton.remove();
+        remove(moreButton);
       }
     });
   }
