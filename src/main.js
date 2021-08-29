@@ -92,9 +92,8 @@ if (dataArray.length) {
 if (dataArray.length > FILM_COUNT_PER_STEP) {
   let renderCardCount = FILM_COUNT_PER_STEP;
   const moreButton = new SiteMoreButtonView();
-  render(siteFilmButtonContainerElement, moreButton, RenderPosition.BEFOREEND);
 
-  // const moreButton = document.querySelector('.films-list__show-more');
+  render(siteFilmButtonContainerElement, moreButton, RenderPosition.BEFOREEND);
 
   if (moreButton) {
     moreButton.setClickHandler(() => {
