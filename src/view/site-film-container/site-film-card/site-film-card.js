@@ -1,4 +1,4 @@
-import {createElement} from '../../utils/utils';
+import AbstractView from '../../abstract.js';
 
 const createSiteFilmCardTemplate = (card = {}) => {
   const {poster, filmName, rating, filmYear, filmLength, filmGenre = '', description, comments = ''} = card;
@@ -25,24 +25,24 @@ const createSiteFilmCardTemplate = (card = {}) => {
         </article>`;
 };
 
-export default class FilmCard {
+export default class FilmCard  extends AbstractView{
   constructor(card) {
+    super();
     this._card = card;
-    this._element = null;
+    this._clickHandler = this._clickHandler.bind(this);
   }
 
   getTemplate() {
     return createSiteFilmCardTemplate(this._card);
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-    return this._element;
+  _clickHandler(event){
+    event.preventDefault();
+    this._callback.click();
   }
 
-  removeElement() {
-    this._element = null;
+  setClickHandler(callback) {
+    this._callback.click = callback;
+    this.getElement().addEventListener('click', this._clickHandler);
   }
 }
