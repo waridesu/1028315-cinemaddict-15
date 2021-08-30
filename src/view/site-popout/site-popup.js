@@ -1,6 +1,6 @@
 import {createSiteCommentTemplate} from './site-comment';
 import {createSiteGeneresTemplate} from './site-geners';
-import {createElement} from '../utils/utils';
+import AbstractView from '../abstract.js';
 
 const createSitePopUpTemplate = (card) => {
   const {poster, filmName, rating, filmYear, filmLength, filmGenre, description, comments} = card;
@@ -121,28 +121,24 @@ const createSitePopUpTemplate = (card) => {
 </section>`;
 };
 
-export default class PopUp {
+export default class PopUp extends AbstractView {
   constructor(card) {
+    super();
     this._data = card;
-    this._element = null;
+    this._clickHandler = this._clickHandler.bind(this);
   }
 
   getTemplate() {
     return createSitePopUpTemplate(this._data);
   }
 
-  getElement() {
-    if(!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-    return this._element;
+  _clickHandler(evt) {
+    evt.preventDefault();
+    this._callback.click();
   }
 
-  setData(card) {
-    return  this._data = card;
-  }
-
-  removeElement() {
-    this._element= null;
+  setCloseButtonHandler(callback) {
+    this._callback.click = callback;
+    this.getElement().querySelector('.film-details__close-btn').addEventListener('click', this._clickHandler);
   }
 }
