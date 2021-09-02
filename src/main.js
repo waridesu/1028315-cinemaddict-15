@@ -1,16 +1,6 @@
-import SiteAvatarView from './view/user-avatar.js';
-import SiteMenuView from './view/site-menu.js';
-import SiteSortView from './view/site-sort.js';
-import SiteFooterView from './view/site-fotter.js';
-import SiteFilmContainerView from './view/site-film-container/site-film-container.js';
-import SiteFilmCardView from './view/site-film-container/site-film-card/site-film-card.js';
-import SiteMoreButtonView from './view/site-more-button.js';
-import SiteSitePopUpView from './view/site-popout/site-popup.js';
-import SiteFilmListView from './view/site-film-container/film-list/film-list.js';
 import {generateCard} from './view/mock/card-data.js';
-import {render, RenderPosition, remove} from './view/utils/render.js';
-import ListEmptyView from './view/site-film-container/list-empty.js';
-
+import MovieList from './presenter/MovieList';
+/*
 const siteBodyElement = document.querySelector('body');
 
 let popUpComponent;
@@ -52,6 +42,7 @@ const renderTask = (filmListElement, task) => {
 
   render(filmListElement, filmComponent, RenderPosition.BEFOREEND);
 };
+
 const FILM_COUNT_PER_STEP = 5;
 const dataArray = new Array(20).fill().map(generateCard);
 
@@ -109,4 +100,10 @@ if (dataArray.length > FILM_COUNT_PER_STEP) {
   }
 }
 
-render(siteFooterSectionElement, new SiteFooterView(dataArray.length), RenderPosition.BEFOREEND);
+render(siteFooterSectionElement, new SiteFooterView(dataArray.length), RenderPosition.BEFOREEND);*/
+const siteMainElement = document.querySelector('.main');
+const dataArray = new Array(20).fill().map(generateCard);
+
+const MovieListPresenter = new MovieList(siteMainElement);
+
+MovieListPresenter.init(dataArray);
