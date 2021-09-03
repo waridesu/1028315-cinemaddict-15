@@ -25,8 +25,8 @@ export default class MovieList {
     this._filmListMostContainer = new SiteFilmListView();
     this._filmListTopContainer = new SiteFilmListView();
     this._sitePopUp = null;
-    // this._clickHandler = this._clickHandler.bind(this);
-    // this._closeHandler = this._closeHandler.bind(this);
+    this._closePopUp = this._closePopUp.bind(this);
+    this._onEscKeyUp = this._onEscKeyUp.bind(this);
   }
 
   init(listMovies) {
