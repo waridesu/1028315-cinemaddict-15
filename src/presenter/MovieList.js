@@ -27,6 +27,9 @@ export default class MovieList {
     this._sitePopUp = null;
     this._closePopUp = this._closePopUp.bind(this);
     this._onEscKeyUp = this._onEscKeyUp.bind(this);
+    this._addToWatchList = this._addToWatchList.bind(this);
+    this._alreadyWatched = this._alreadyWatched.bind(this);
+    this._addToFavorite = this._addToFavorite.bind(this);
   }
 
   init(listMovies) {
@@ -61,6 +64,7 @@ export default class MovieList {
       document.removeEventListener('keyup', this._onEscKeyUp);
       this._closePopUp();
     });
+    // eslint-disable-next-line no-alert
   }
 
   _closePopUp() {
@@ -75,6 +79,19 @@ export default class MovieList {
       this._closePopUp();
       document.removeEventListener('keyup', this._onEscKeyUp);
     }
+  }
+
+  _addToWatchList() {
+    // eslint-disable-next-line no-alert
+    this._sitePopUp.setAddToWatchListHandler(()=> alert('hi'));
+  }
+
+  _alreadyWatched() {
+
+  }
+
+  _addToFavorite() {
+
   }
 
   _renderMovie(movie) {

@@ -126,6 +126,7 @@ export default class PopUp extends AbstractView {
     super();
     this._data = card;
     this._clickHandler = this._clickHandler.bind(this);
+    this._clickAddTo = this._clickAddTo.bind(this);
   }
 
   getTemplate() {
@@ -137,8 +138,28 @@ export default class PopUp extends AbstractView {
     this._callback.click();
   }
 
+  _clickAddTo(evt) {
+    evt.preventDefault();
+    this._callback.click();
+  }
+
   setCloseButtonHandler(callback) {
     this._callback.click = callback;
     this.getElement().querySelector('.film-details__close-btn').addEventListener('click', this._clickHandler);
+  }
+
+  setAddToWatchListHandler(callback) {
+    this._callback.click = callback;
+    this.getElement().querySelector('.film-card__controls-item--add-to-watchlist').addEventListener('click', this._clickAddTo);
+  }
+
+  setAlreadyWatchedHandler(callback) {
+    this._callback.click = callback;
+    this.getElement().querySelector('.film-card__controls-item--mark-as-watched').addEventListener('click', this._clickHandler);
+  }
+
+  setAddToFavoritesHandler(callback) {
+    this._callback.click = callback;
+    this.getElement().querySelector('.film-card__controls-item--favorite').addEventListener('click', this._clickHandler);
   }
 }
