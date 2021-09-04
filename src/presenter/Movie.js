@@ -15,6 +15,7 @@ export default class Movie {
     this._alreadyWatched = this._alreadyWatched.bind(this);
     this._addToFavorite = this._addToFavorite.bind(this);
     this._onEscKeyUp = this._onEscKeyUp.bind(this);
+    this._renderPopUp = this._renderPopUp.bind(this);
   }
 
   init(movie) {
