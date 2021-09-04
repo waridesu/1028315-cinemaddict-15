@@ -60,6 +60,8 @@ export default class MovieList {
     document.body.classList.add('hide-overflow');
     this._sitePopUp = new SiteSitePopUpView(movie);
     render(siteBodyElement, this._sitePopUp, RenderPosition.BEFOREEND);
+    // eslint-disable-next-line no-alert
+    this._sitePopUp.setAddToWatchListHandler(()=> alert('hi'));
     this._sitePopUp.setCloseButtonHandler(() => {
       document.removeEventListener('keyup', this._onEscKeyUp);
       this._closePopUp();
@@ -83,7 +85,6 @@ export default class MovieList {
 
   _addToWatchList() {
     // eslint-disable-next-line no-alert
-    this._sitePopUp.setAddToWatchListHandler(()=> alert('hi'));
   }
 
   _alreadyWatched() {
@@ -100,7 +101,6 @@ export default class MovieList {
     filmComponent.setClickHandler(() => {
       this._renderPopUp(movie);
     });
-
     render(this._filmListSectionContainer, filmComponent, RenderPosition.BEFOREEND);
 
   }
