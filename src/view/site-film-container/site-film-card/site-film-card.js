@@ -18,9 +18,9 @@ const createSiteFilmCardTemplate = (card = {}) => {
           <p class="film-card__description">${description}</p>
           <a class="film-card__comments">${commentsNumber} comments</a>
           <div class="film-card__controls">
-            <button class="film-card__controls-item film-card__controls-item--add-to-watchlist" type="button">Add to watchlist</button>
-            <button class="film-card__controls-item film-card__controls-item--mark-as-watched" type="button">Mark as watched</button>
-            <button class="film-card__controls-item film-card__controls-item--favorite" type="button">Mark as favorite</button>
+            <button class="film-card__controls-item film-card__controls-item--add-to-watchlist ${card.user_details.watchlist ? 'film-card__controls-item--active' : ''}" type="button">Add to watchlist</button>
+            <button class="film-card__controls-item film-card__controls-item--mark-as-watched ${card.user_details.alreadyWatched ? 'film-card__controls-item--active' : ''}" type="button">Mark as watched</button>
+            <button class="film-card__controls-item film-card__controls-item--favorite ${card.user_details.favorite ? 'film-card__controls-item--active' : ''}" type="button">Mark as favorite</button>
           </div>
         </article>`;
 };
