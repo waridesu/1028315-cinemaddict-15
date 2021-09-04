@@ -42,12 +42,11 @@ export default class Movie {
   }
 
   _renderPopUp() {
-    if (this._sitePopUp) {
+    if (document.querySelector('.film-details')) {
       this._closePopUp();
     }
     document.addEventListener('keyup', this._onEscKeyUp);
     document.body.classList.add('hide-overflow');
-    // can't pass data for popUp this._movie = undefined
     this._sitePopUp = new SiteSitePopUpView(this._movie);
     render(this._movieListContainer, this._sitePopUp, RenderPosition.BEFOREEND);
 

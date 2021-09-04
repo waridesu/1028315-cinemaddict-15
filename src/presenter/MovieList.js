@@ -26,6 +26,7 @@ export default class MovieList {
     this._filmListMostContainer = new SiteFilmListView();
     this._filmListTopContainer = new SiteFilmListView();
     this._moreButton = new SiteMoreButtonView();
+    this._handleTaskChange = this._handleTaskChange.bind(this);
   }
 
   init(listMovies) {
