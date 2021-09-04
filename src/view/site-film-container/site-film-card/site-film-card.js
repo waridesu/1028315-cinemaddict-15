@@ -26,9 +26,9 @@ const createSiteFilmCardTemplate = (card = {}) => {
 };
 
 export default class FilmCard  extends AbstractView {
-  constructor(card) {
+  constructor(movie) {
     super();
-    this._card = card;
+    this._movie = movie;
     this._clickHandler = this._clickHandler.bind(this);
     this._clickAddToWatchListHandler = this._clickAddToWatchListHandler.bind(this);
     this._clickAddAlreadyWatchedHandler = this._clickAddAlreadyWatchedHandler.bind(this);
@@ -36,7 +36,7 @@ export default class FilmCard  extends AbstractView {
   }
 
   getTemplate() {
-    return createSiteFilmCardTemplate(this._card);
+    return createSiteFilmCardTemplate(this._movie);
   }
 
   _clickHandler(event){

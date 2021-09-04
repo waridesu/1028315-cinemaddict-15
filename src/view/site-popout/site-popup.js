@@ -2,8 +2,8 @@ import {createSiteCommentTemplate} from './site-comment';
 import {createSiteGeneresTemplate} from './site-geners';
 import AbstractView from '../abstract.js';
 
-const createSitePopUpTemplate = (card) => {
-  const {poster, filmName, rating, filmYear, filmLength, filmGenre, description, comments} = card;
+const createSitePopUpTemplate = (movie) => {
+  const {poster, filmName, rating, filmYear, filmLength, filmGenre, description, comments} = movie;
   let commentsNumber = 0;
   if (comments.length) {
     commentsNumber = comments.length;
@@ -72,9 +72,9 @@ const createSitePopUpTemplate = (card) => {
       </div>
 
       <section class="film-details__controls">
-        <button type="button" class="film-details__control-button film-details__control-button--watchlist ${card.user_details.watchlist ? 'film-details__control-button--active' : ''}" id="watchlist" name="watchlist">Add to watchlist</button>
-        <button type="button" class="film-details__control-button film-details__control-button--watched ${card.user_details.alreadyWatched ? 'film-details__control-button--active' : ''}" id="watched" name="watched">Already watched</button>
-        <button type="button" class="film-details__control-button film-details__control-button--favorite ${card.user_details.favorite ? 'film-details__control-button--active' : ''}" id="favorite" name="favorite">Add to favorites</button>
+        <button type="button" class="film-details__control-button film-details__control-button--watchlist ${movie.user_details.watchlist ? 'film-details__control-button--active' : ''}" id="watchlist" name="watchlist">Add to watchlist</button>
+        <button type="button" class="film-details__control-button film-details__control-button--watched ${movie.user_details.alreadyWatched ? 'film-details__control-button--active' : ''}" id="watched" name="watched">Already watched</button>
+        <button type="button" class="film-details__control-button film-details__control-button--favorite ${movie.user_details.favorite ? 'film-details__control-button--active' : ''}" id="favorite" name="favorite">Add to favorites</button>
       </section>
     </div>
 
