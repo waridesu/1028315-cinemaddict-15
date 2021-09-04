@@ -126,7 +126,9 @@ export default class PopUp extends AbstractView {
     super();
     this._data = card;
     this._clickHandler = this._clickHandler.bind(this);
-    this._clickAddTo = this._clickAddTo.bind(this);
+    this._clickAddToWatchListHandler = this._clickAddToWatchListHandler.bind(this);
+    this._clickAddAlreadyWatchedHandler = this._clickAddAlreadyWatchedHandler.bind(this);
+    this._clickAddFavoritesHandler = this._clickAddFavoritesHandler.bind(this);
   }
 
   getTemplate() {
@@ -138,9 +140,19 @@ export default class PopUp extends AbstractView {
     this._callback.click();
   }
 
-  _clickAddTo(evt) {
+  _clickAddToWatchListHandler(evt) {
     evt.preventDefault();
-    this._callback.click();
+    this._callback.addToWatchList();
+  }
+
+  _clickAddAlreadyWatchedHandler(evt) {
+    evt.preventDefault();
+    this._callback.addToAlreadyWatched();
+  }
+
+  _clickAddFavoritesHandler(evt) {
+    evt.preventDefault();
+    this._callback.addToFavorite();
   }
 
   setCloseButtonHandler(callback) {
@@ -149,17 +161,17 @@ export default class PopUp extends AbstractView {
   }
 
   setAddToWatchListHandler(callback) {
-    this._callback.click = callback;
-    this.getElement().querySelector('.film-card__controls-item--add-to-watchlist').addEventListener('click', this._clickAddTo);
+    this._callback.addToWatchList = callback;
+    this.getElement().querySelector('.film-details__control-button--watchlist').addEventListener('click', this._clickAddToWatchListHandler);
   }
 
   setAlreadyWatchedHandler(callback) {
-    this._callback.click = callback;
-    this.getElement().querySelector('.film-card__controls-item--mark-as-watched').addEventListener('click', this._clickHandler);
+    this._callback.addToAlreadyWatched = callback;
+    this.getElement().querySelector('.film-details__control-button--watched').addEventListener('click', this._clickAddAlreadyWatchedHandler);
   }
 
   setAddToFavoritesHandler(callback) {
-    this._callback.click = callback;
-    this.getElement().querySelector('.film-card__controls-item--favorite').addEventListener('click', this._clickHandler);
+    this._callback.addToFavorite = callback;
+    this.getElement().querySelector('.film-details__control-button--favorite').addEventListener('click', this._clickAddFavoritesHandler);
   }
 }

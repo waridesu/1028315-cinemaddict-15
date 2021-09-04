@@ -60,13 +60,15 @@ export default class MovieList {
     document.body.classList.add('hide-overflow');
     this._sitePopUp = new SiteSitePopUpView(movie);
     render(siteBodyElement, this._sitePopUp, RenderPosition.BEFOREEND);
-    // eslint-disable-next-line no-alert
-    this._sitePopUp.setAddToWatchListHandler(()=> alert('hi'));
+
+    this._sitePopUp.setAddToWatchListHandler(()=> this._addToWatchList(movie));
+    this._sitePopUp.setAlreadyWatchedHandler(()=> this._alreadyWatched(movie));
+    this._sitePopUp.setAddToFavoritesHandler(()=> this._addToFavorite(movie));
+
     this._sitePopUp.setCloseButtonHandler(() => {
       document.removeEventListener('keyup', this._onEscKeyUp);
       this._closePopUp();
     });
-    // eslint-disable-next-line no-alert
   }
 
   _closePopUp() {
@@ -83,16 +85,16 @@ export default class MovieList {
     }
   }
 
-  _addToWatchList() {
-    // eslint-disable-next-line no-alert
+  _addToWatchList(movie) {
+    movie.user_details.watchlist = true;
   }
 
-  _alreadyWatched() {
-
+  _alreadyWatched(movie) {
+    movie.user_details.alreadyWatched = true;
   }
 
-  _addToFavorite() {
-
+  _addToFavorite(movie) {
+    movie.user_details.favorite = true;
   }
 
   _renderMovie(movie) {
@@ -103,6 +105,9 @@ export default class MovieList {
     });
     render(this._filmListSectionContainer, filmComponent, RenderPosition.BEFOREEND);
 
+    filmComponent.setAddToWatchListHandler(()=> this._addToWatchList(movie));
+    filmComponent.setAlreadyWatchedHandler(()=> this._alreadyWatched(movie));
+    filmComponent.setAddToFavoritesHandler(()=> this._addToFavorite(movie));
   }
 
   _renderMovies(from, to) {
@@ -111,7 +116,7 @@ export default class MovieList {
       .forEach((boardTask) => this._renderMovie(boardTask));
   }
 
-  _renderNoMovie() {}
+  // _renderNoMovie() {}
 
   _renderLoadMoreButton() {}
 

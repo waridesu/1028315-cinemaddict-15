@@ -120,7 +120,7 @@ export const generateCard = () => ({
   comments: generateComments(),
   'user_details': {
     'watchlist': !Math.round(Math.random()),
-    'already_watched': !Math.round(Math.random()),
+    'alreadyWatched': !Math.round(Math.random()),
     'favorite': !Math.round(Math.random()),
   },
 });
