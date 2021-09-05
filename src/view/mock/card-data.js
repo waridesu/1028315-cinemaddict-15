@@ -1,3 +1,5 @@
+import {nanoid} from 'nanoid';
+
 const getRandomInteger = (a = 0, b = 1) => {
   const lower = Math.ceil(Math.min(a, b));
   const upper = Math.floor(Math.max(a, b));
@@ -110,6 +112,7 @@ const generateComments = () => {
 };
 
 export const generateCard = () => ({
+  id: nanoid(),
   poster: generatePosterUrl(),
   filmName: generateFilmName(),
   rating: generateRating(),

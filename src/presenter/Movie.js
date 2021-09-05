@@ -84,9 +84,7 @@ export default class Movie {
 
   _addToWatchList() {
     this._changeData(
-      Object.assign({}, this._movie.user_details, {
-        watchlist: !this._movie.user_details.watchlist,
-      },
+      Object.assign({}, this._movie.user_details.watchlist =!this._movie.user_details.watchlist,
       ),
     );
   }
