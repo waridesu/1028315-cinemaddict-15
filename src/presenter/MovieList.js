@@ -36,6 +36,9 @@ export default class MovieList {
     this._renderPopUp = this._renderPopUp.bind(this);
     this._onEscKeyUp = this._onEscKeyUp.bind(this);
     this._closePopUp = this._closePopUp.bind(this);
+    this._setAddToWatchList = this._setAddToWatchList.bind(this);
+    this._setAlreadyWatched = this._setAlreadyWatched.bind(this);
+    this._setAddToFavorite = this._setAddToFavorite.bind(this);
   }
 
   init(listMovies) {
@@ -64,17 +67,18 @@ export default class MovieList {
     this._sourcedMovieList = updateItem(this._sourcedMovieList, updatedFilm);
     this._moviePresenter.get(updatedFilm.id).init(updatedFilm);
     if (this._sitePopUp) {
-      this._renderPopUp(updatedFilm, this._setAddToWatchList(updatedFilm), this._setAlreadyWatched, this._setAddToFavorite);
+      this._movie = updatedFilm;
+      this._renderPopUp(updatedFilm, this._setAddToWatchList, this._setAlreadyWatched, this._setAddToFavorite);
     }
   }
 
-  _setAddToWatchList(movie) {
+  _setAddToWatchList() {
     this._handleMovieChange(
-      Object.assign({}, movie, {
+      Object.assign({}, this._movie, {
         'user_details': {
-          watchlist: !movie.user_details.watchlist,
-          alreadyWatched: movie.user_details.alreadyWatched,
-          favorite: movie.user_details.favorite,
+          watchlist: !this._movie.user_details.watchlist,
+          alreadyWatched: this._movie.user_details.alreadyWatched,
+          favorite: this._movie.user_details.favorite,
         },
       },
       ),
