@@ -9,9 +9,9 @@ export default class Movie {
 
     this._movieComponent = null;
     this._prevMovieComponent = null;
-    this._addToWatchList = this._addToWatchList.bind(this);
-    this._alreadyWatched = this._alreadyWatched.bind(this);
-    this._addToFavorite = this._addToFavorite.bind(this);
+    this._setAddToWatchList = this._setAddToWatchList.bind(this);
+    this._setAlreadyWatched = this._setAlreadyWatched.bind(this);
+    this._setAddToFavorite = this._setAddToFavorite.bind(this);
     this._openPopup = this._openPopup.bind(this);
   }
 
@@ -23,9 +23,9 @@ export default class Movie {
     this._movieComponent = new SiteFilmCardView(movie);
 
     this._movieComponent.setClickHandler(this._openPopup);
-    this._movieComponent.setAddToWatchListHandler(this._addToWatchList);
-    this._movieComponent.setAlreadyWatchedHandler(this._alreadyWatched);
-    this._movieComponent.setAddToFavoritesHandler(this._addToFavorite);
+    this._movieComponent.setAddToWatchListHandler(this._setAddToWatchList);
+    this._movieComponent.setAlreadyWatchedHandler(this._setAlreadyWatched);
+    this._movieComponent.setAddToFavoritesHandler(this._setAddToFavorite);
 
     if(this._prevMovieComponent === null) {
       return render(this._movieListContainer, this._movieComponent, RenderPosition.BEFOREEND);
@@ -47,10 +47,10 @@ export default class Movie {
   }
 
   _openPopup () {
-    this._renderPopup(this._movie, this._addToWatchList, this._alreadyWatched, this._addToFavorite);
+    this._renderPopup(this._movie, this._setAddToWatchList, this._setAlreadyWatched, this._setAddToFavorite);
   }
 
-  _addToWatchList() {
+  _setAddToWatchList() {
     this._rerenderData(
       Object.assign({}, this._movie, {
         'user_details': {
@@ -63,7 +63,7 @@ export default class Movie {
     );
   }
 
-  _alreadyWatched() {
+  _setAlreadyWatched() {
     this._rerenderData(
       Object.assign({}, this._movie, {
         'user_details': {
@@ -76,7 +76,7 @@ export default class Movie {
     );
   }
 
-  _addToFavorite() {
+  _setAddToFavorite() {
     this._rerenderData(
       Object.assign({}, this._movie, {
         'user_details': {
