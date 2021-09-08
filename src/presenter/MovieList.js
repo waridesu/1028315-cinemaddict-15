@@ -67,51 +67,50 @@ export default class MovieList {
     this._sourcedMovieList = updateItem(this._sourcedMovieList, updatedFilm);
     this._moviePresenter.get(updatedFilm.id).init(updatedFilm);
     if (this._sitePopUp) {
-      this._movie = updatedFilm;
-      this._renderPopUp(updatedFilm, this._setAddToWatchList, this._setAlreadyWatched, this._setAddToFavorite);
+      this._renderPopUp(updatedFilm);
     }
   }
 
-  _setAddToWatchList() {
+  _setAddToWatchList(movie) {
     this._handleMovieChange(
-      Object.assign({}, this._movie, {
+      Object.assign({}, movie, {
         'user_details': {
-          watchlist: !this._movie.user_details.watchlist,
-          alreadyWatched: this._movie.user_details.alreadyWatched,
-          favorite: this._movie.user_details.favorite,
+          watchlist: !movie.user_details.watchlist,
+          alreadyWatched: movie.user_details.alreadyWatched,
+          favorite: movie.user_details.favorite,
         },
       },
       ),
     );
   }
 
-  _setAlreadyWatched() {
+  _setAlreadyWatched(movie) {
     this._handleMovieChange(
-      Object.assign({}, this._movie, {
+      Object.assign({}, movie, {
         'user_details': {
-          watchlist: this._movie.user_details.watchlist,
-          alreadyWatched: !this._movie.user_details.alreadyWatched,
-          favorite: this._movie.user_details.favorite,
+          watchlist: movie.user_details.watchlist,
+          alreadyWatched: !movie.user_details.alreadyWatched,
+          favorite: movie.user_details.favorite,
         },
       },
       ),
     );
   }
 
-  _setAddToFavorite() {
+  _setAddToFavorite(movie) {
     this._handleMovieChange(
-      Object.assign({}, this._movie, {
+      Object.assign({}, movie, {
         'user_details': {
-          watchlist: this._movie.user_details.watchlist,
-          alreadyWatched: this._movie.user_details.alreadyWatched,
-          favorite: !this._movie.user_details.favorite,
+          watchlist: movie.user_details.watchlist,
+          alreadyWatched: movie.user_details.alreadyWatched,
+          favorite: !movie.user_details.favorite,
         },
       },
       ),
     );
   }
 
-  _renderPopUp(movie, addToWatchList, alreadyWatched, addToFavorite) {
+  _renderPopUp(movie) {
     if (this._sitePopUp) {
       this._closePopUp();
     }
@@ -124,9 +123,9 @@ export default class MovieList {
 
     render(this._movieListContainer, this._sitePopUp, RenderPosition.BEFOREEND);
 
-    this._sitePopUp.setAddToWatchListHandler(addToWatchList);
-    this._sitePopUp.setAlreadyWatchedHandler(alreadyWatched);
-    this._sitePopUp.setAddToFavoritesHandler(addToFavorite);
+    this._sitePopUp.setAddToWatchListHandler(() => this._setAddToWatchList(movie));
+    this._sitePopUp.setAlreadyWatchedHandler(() => this._setAlreadyWatched(movie));
+    this._sitePopUp.setAddToFavoritesHandler(() => this._setAddToFavorite(movie));
 
     this._sitePopUp.setCloseButtonHandler(this._closePopUp);
 
@@ -136,16 +135,20 @@ export default class MovieList {
     remove(this._prevSitePopUp);
   }
 
-  _renderSort() {}
+  _renderSort() {
+
+  }
 
   _renderMovie(movie) {
-    const moviePresenter = new MoviePresenter(this._filmListSectionContainer, this._handleMovieChange, this._renderPopUp);
-    const mostMoviePresenter = new MoviePresenter(this._filmListMostContainer, this._handleMovieChange, this._renderPopUp);
-    const topMoviePresenter = new MoviePresenter(this._filmListTopContainer, this._handleMovieChange, this._renderPopUp);
+    const moviePresenter = new MoviePresenter(this._filmListSectionContainer, this._renderPopUp, this._setAddToWatchList, this._setAlreadyWatched, this._setAddToFavorite);
     moviePresenter.init(movie);
-    mostMoviePresenter.init(movie);
-    topMoviePresenter.init(movie);
     this._moviePresenter.set(movie.id, moviePresenter);
+  }
+
+  _ren(movie) {
+    const movieSubPresenter = new MoviePresenter(this._filmListMostContainer, this._renderPopUp, this._setAddToWatchList, this._setAlreadyWatched, this._setAddToFavorite);
+    movieSubPresenter.init(movie);
+    this._moviePresenter.set(movie.id, movieSubPresenter);
   }
 
   _renderMovies(from, to) {
