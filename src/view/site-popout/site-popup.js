@@ -2,8 +2,8 @@ import {createSiteCommentTemplate} from './site-comment';
 import {createSiteGeneresTemplate} from './site-geners';
 import AbstractView from '../abstract.js';
 
-const createSitePopUpTemplate = (card) => {
-  const {poster, filmName, rating, filmYear, filmLength, filmGenre, description, comments} = card;
+const createSitePopUpTemplate = (movie) => {
+  const {poster, filmName, rating, filmYear, filmLength, filmGenre, description, comments} = movie;
   let commentsNumber = 0;
   if (comments.length) {
     commentsNumber = comments.length;
@@ -72,9 +72,9 @@ const createSitePopUpTemplate = (card) => {
       </div>
 
       <section class="film-details__controls">
-        <button type="button" class="film-details__control-button film-details__control-button--watchlist" id="watchlist" name="watchlist">Add to watchlist</button>
-        <button type="button" class="film-details__control-button film-details__control-button--active film-details__control-button--watched" id="watched" name="watched">Already watched</button>
-        <button type="button" class="film-details__control-button film-details__control-button--favorite" id="favorite" name="favorite">Add to favorites</button>
+        <button type="button" class="film-details__control-button film-details__control-button--watchlist ${movie.user_details.watchlist ? 'film-details__control-button--active' : ''}" id="watchlist" name="watchlist">Add to watchlist</button>
+        <button type="button" class="film-details__control-button film-details__control-button--watched ${movie.user_details.alreadyWatched ? 'film-details__control-button--active' : ''}" id="watched" name="watched">Already watched</button>
+        <button type="button" class="film-details__control-button film-details__control-button--favorite ${movie.user_details.favorite ? 'film-details__control-button--active' : ''}" id="favorite" name="favorite">Add to favorites</button>
       </section>
     </div>
 
@@ -126,6 +126,9 @@ export default class PopUp extends AbstractView {
     super();
     this._data = card;
     this._clickHandler = this._clickHandler.bind(this);
+    this._clickAddToWatchListHandler = this._clickAddToWatchListHandler.bind(this);
+    this._clickAddAlreadyWatchedHandler = this._clickAddAlreadyWatchedHandler.bind(this);
+    this._clickAddFavoritesHandler = this._clickAddFavoritesHandler.bind(this);
   }
 
   getTemplate() {
@@ -137,8 +140,38 @@ export default class PopUp extends AbstractView {
     this._callback.click();
   }
 
+  _clickAddToWatchListHandler(evt) {
+    evt.preventDefault();
+    this._callback.addToWatchList();
+  }
+
+  _clickAddAlreadyWatchedHandler(evt) {
+    evt.preventDefault();
+    this._callback.addToAlreadyWatched();
+  }
+
+  _clickAddFavoritesHandler(evt) {
+    evt.preventDefault();
+    this._callback.addToFavorite();
+  }
+
   setCloseButtonHandler(callback) {
     this._callback.click = callback;
     this.getElement().querySelector('.film-details__close-btn').addEventListener('click', this._clickHandler);
+  }
+
+  setAddToWatchListHandler(callback) {
+    this._callback.addToWatchList = callback;
+    this.getElement().querySelector('.film-details__control-button--watchlist').addEventListener('click', this._clickAddToWatchListHandler);
+  }
+
+  setAlreadyWatchedHandler(callback) {
+    this._callback.addToAlreadyWatched = callback;
+    this.getElement().querySelector('.film-details__control-button--watched').addEventListener('click', this._clickAddAlreadyWatchedHandler);
+  }
+
+  setAddToFavoritesHandler(callback) {
+    this._callback.addToFavorite = callback;
+    this.getElement().querySelector('.film-details__control-button--favorite').addEventListener('click', this._clickAddFavoritesHandler);
   }
 }

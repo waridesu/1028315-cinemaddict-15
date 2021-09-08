@@ -1,3 +1,5 @@
+import {nanoid} from 'nanoid';
+
 const getRandomInteger = (a = 0, b = 1) => {
   const lower = Math.ceil(Math.min(a, b));
   const upper = Math.floor(Math.max(a, b));
@@ -110,6 +112,7 @@ const generateComments = () => {
 };
 
 export const generateCard = () => ({
+  id: nanoid(),
   poster: generatePosterUrl(),
   filmName: generateFilmName(),
   rating: generateRating(),
@@ -120,7 +123,7 @@ export const generateCard = () => ({
   comments: generateComments(),
   'user_details': {
     'watchlist': !Math.round(Math.random()),
-    'already_watched': !Math.round(Math.random()),
+    'alreadyWatched': !Math.round(Math.random()),
     'favorite': !Math.round(Math.random()),
   },
 });
