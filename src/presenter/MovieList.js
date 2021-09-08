@@ -145,12 +145,6 @@ export default class MovieList {
     this._moviePresenter.set(movie.id, moviePresenter);
   }
 
-  _ren(movie) {
-    const movieSubPresenter = new MoviePresenter(this._filmListMostContainer, this._renderPopUp, this._setAddToWatchList, this._setAlreadyWatched, this._setAddToFavorite);
-    movieSubPresenter.init(movie);
-    this._moviePresenter.set(movie.id, movieSubPresenter);
-  }
-
   _renderMovies(from, to) {
     this._movieList
       .slice(from, to)
@@ -200,7 +194,6 @@ export default class MovieList {
     }
     this._renderSort();
     this._renderMovies(0, Math.min(this._movieList.length, this._renderMovieCount));
-    this._renderSubMovies(0, Math.min(this._movieList.length, this._renderSubMovieCount));
     if(this._movieList.length > this._renderMovieCount) {
       this._renderLoadMoreButton();
     }
