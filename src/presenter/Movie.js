@@ -11,7 +11,6 @@ export default class Movie {
     this._setAddToWatchList = setAddToWatchList;
     this._setAlreadyWatched = setAlreadyWatched;
     this._setAddToFavorite = setAddToFavorite;
-    this._openPopup = this._openPopup.bind(this);
   }
 
   init(movie) {
@@ -21,7 +20,7 @@ export default class Movie {
 
     this._movieComponent = new SiteFilmCardView(movie);
 
-    this._movieComponent.setClickHandler(this._openPopup);
+    this._movieComponent.setClickHandler(() => this._renderPopup(this._movie));
     this._movieComponent.setAddToWatchListHandler(() => this._setAddToWatchList(this._movie));
     this._movieComponent.setAlreadyWatchedHandler(() => this._setAlreadyWatched(this._movie));
     this._movieComponent.setAddToFavoritesHandler(() => this._setAddToFavorite(this._movie));
@@ -43,9 +42,5 @@ export default class Movie {
 
   resetView() {
     this._replaceMovie();
-  }
-
-  _openPopup () {
-    this._renderPopup(this._movie);
   }
 }

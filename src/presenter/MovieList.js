@@ -2,7 +2,6 @@ import SiteFilmContainerView from '../view/site-film-container/site-film-contain
 import SiteMoreButtonView from '../view/site-more-button.js';
 import SiteFilmListView from '../view/site-film-container/film-list/film-list.js';
 import {remove, render, RenderPosition } from '../view/utils/render';
-import SiteSortView from '../view/site-sort';
 import FilmListTop from '../view/site-film-container/film-list-containers/film-section-top';
 import FilmListMost from '../view/site-film-container/film-list-containers/film-section-most';
 import FilmListSection from '../view/site-film-container/film-list-containers/film-section';
@@ -20,7 +19,6 @@ export default class MovieList {
     this._renderMovieCount = FILM_COUNT_PER_STEP;
     this._renderSubMovieCount = SUB_FILM_COUNT_PER_STEP;
     this._moviePresenter = new Map();
-    this._siteSortComponent = new SiteSortView();
     this._movieList = [];
     this._sitePopUp = null;
     this._prevSitePopUp = null;
@@ -39,6 +37,9 @@ export default class MovieList {
     this._setAddToWatchList = this._setAddToWatchList.bind(this);
     this._setAlreadyWatched = this._setAlreadyWatched.bind(this);
     this._setAddToFavorite = this._setAddToFavorite.bind(this);
+    this._sortByDefault = this._sortByDefault.bind(this);
+    this._sortByDate = this._sortByDate.bind(this);
+    this._sortByRating = this._sortByRating.bind(this);
   }
 
   init(listMovies) {
@@ -46,8 +47,7 @@ export default class MovieList {
 
     this._sourcedMovieList = listMovies.slice();
 
-    new MenuPresenter(this._movieListContainer).init(this._movieList);
-    render(this._movieListContainer, this._siteSortComponent, RenderPosition.BEFOREEND);
+    new MenuPresenter(this._movieListContainer).init(this._movieList, this._sortByDefault, this._sortByDate, this._sortByRating);
     render(this._movieListContainer, this._siteFilmContainerComponent, RenderPosition.BEFOREEND);
 
     render(this._siteFilmContainerComponent, this._filmListSection, RenderPosition.BEFOREEND);
@@ -108,6 +108,15 @@ export default class MovieList {
       },
       ),
     );
+  }
+
+  _sortByDefault() {
+  }
+
+  _sortByDate() {
+  }
+
+  _sortByRating() {
   }
 
   _renderPopUp(movie) {
