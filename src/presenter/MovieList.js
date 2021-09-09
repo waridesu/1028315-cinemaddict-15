@@ -9,6 +9,7 @@ import {updateItem} from '../view/utils/common';
 import MoviePresenter from './Movie.js';
 import SitePopUpView from '../view/site-popout/site-popup';
 import MenuPresenter from './Menu.js';
+import {SortType} from '../view/utils/const';
 
 const FILM_COUNT_PER_STEP = 5;
 const SUB_FILM_COUNT_PER_STEP = 2;
@@ -18,6 +19,7 @@ export default class MovieList {
     this._movieListContainer = movieListContainer;
     this._renderMovieCount = FILM_COUNT_PER_STEP;
     this._renderSubMovieCount = SUB_FILM_COUNT_PER_STEP;
+    this._currentSortType = SortType.DEFAULT;
     this._moviePresenter = new Map();
     this._movieList = [];
     this._sitePopUp = null;
@@ -37,9 +39,7 @@ export default class MovieList {
     this._setAddToWatchList = this._setAddToWatchList.bind(this);
     this._setAlreadyWatched = this._setAlreadyWatched.bind(this);
     this._setAddToFavorite = this._setAddToFavorite.bind(this);
-    this._sortByDefault = this._sortByDefault.bind(this);
-    this._sortByDate = this._sortByDate.bind(this);
-    this._sortByRating = this._sortByRating.bind(this);
+    this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
   }
 
   init(listMovies) {
@@ -47,7 +47,7 @@ export default class MovieList {
 
     this._sourcedMovieList = listMovies.slice();
 
-    new MenuPresenter(this._movieListContainer).init(this._movieList, this._sortByDefault, this._sortByDate, this._sortByRating);
+    new MenuPresenter(this._movieListContainer).init(this._movieList, this._handleSortTypeChange);
     render(this._movieListContainer, this._siteFilmContainerComponent, RenderPosition.BEFOREEND);
 
     render(this._siteFilmContainerComponent, this._filmListSection, RenderPosition.BEFOREEND);
@@ -110,13 +110,36 @@ export default class MovieList {
     );
   }
 
-  _sortByDefault() {
+  _clearTaskList() {
+    this._moviePresenter.forEach((presenter) => presenter.destroy());
+    this._moviePresenter.clear();
+    this._renderMovieCount = FILM_COUNT_PER_STEP;
+    remove(this._moreButton);
   }
 
-  _sortByDate() {
+  _sortTasks(sortType) {
+    switch (sortType) {
+      case SortType.DATE:
+        this._movieList.sort(this._movieList.filmYear);
+        break;
+      case SortType.RATING:
+        this._movieList.sort(this._movieList.rating);
+        break;
+      default:
+        this._movieList = this._sourcedMovieList.slice();
+    }
+
+    this._currentSortType = sortType;
   }
 
-  _sortByRating() {
+  _handleSortTypeChange(sortType) {
+    if (this._currentSortType === sortType) {
+      return;
+    }
+
+    this._sortTasks(sortType);
+    this._clearTaskList();
+    this._renderList();
   }
 
   _renderPopUp(movie) {

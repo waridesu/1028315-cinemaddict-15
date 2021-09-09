@@ -2,14 +2,13 @@ import SiteMenuView from '../view/site-menu';
 import {render, RenderPosition} from '../view/utils/render';
 import SiteSortView from '../view/site-sort';
 
-export default class siteMenu {
-  constructor(menuContainer, sortDefault, sortDate, sortRating) {
+export default class SiteMenu {
+  constructor(menuContainer, handel) {
     this._menuContainer = menuContainer;
     this._siteSortComponent = new SiteSortView();
     this._siteMenuComponent = null;
-    this._sortDefault = sortDefault;
-    this._sortDate = sortDate;
-    this._sortRating = sortRating;
+    this._handleSortTypeChange = handel;
+
   }
 
   init(details) {
@@ -17,8 +16,6 @@ export default class siteMenu {
     render(this._menuContainer, this._siteMenuComponent, RenderPosition.BEFOREEND);
     render(this._menuContainer, this._siteSortComponent, RenderPosition.BEFOREEND);
 
-    this._siteSortComponent.sortByDefault(() => this._sortDefault());
-    this._siteSortComponent.sortByDate(() => this._sortDate());
-    this._siteSortComponent.sortByRating(() => this._sortRating());
+    this._siteSortComponent.setSortTypeChangeHandler(() => this._handleSortTypeChange);
   }
 }
