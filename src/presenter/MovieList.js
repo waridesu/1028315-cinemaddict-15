@@ -120,10 +120,10 @@ export default class MovieList {
   _sortTasks(sortType) {
     switch (sortType) {
       case SortType.DATE:
-        this._movieList.sort(this._movieList.filmYear);
+        this._movieList.sort((a, b) => a.filmYear > b.filmYear && 1 || -1);
         break;
       case SortType.RATING:
-        this._movieList.sort(this._movieList.rating);
+        this._movieList.sort((a, b) => a.rating > b.rating && 1 || -1);
         break;
       default:
         this._movieList = this._sourcedMovieList.slice();

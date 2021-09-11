@@ -3,11 +3,11 @@ import {render, RenderPosition} from '../view/utils/render';
 import SiteSortView from '../view/site-sort';
 
 export default class SiteMenu {
-  constructor(menuContainer, handel) {
+  constructor(menuContainer, handle) {
     this._menuContainer = menuContainer;
     this._siteSortComponent = new SiteSortView();
     this._siteMenuComponent = null;
-    this._handleSortTypeChange = handel;
+    this._handleSortTypeChange = handle;
 
   }
 
@@ -16,6 +16,6 @@ export default class SiteMenu {
     render(this._menuContainer, this._siteMenuComponent, RenderPosition.BEFOREEND);
     render(this._menuContainer, this._siteSortComponent, RenderPosition.BEFOREEND);
 
-    this._siteSortComponent.setSortTypeChangeHandler(() => this._handleSortTypeChange);
+    this._siteSortComponent.setSortTypeChangeHandler(this._handleSortTypeChange);
   }
 }
