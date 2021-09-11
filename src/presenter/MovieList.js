@@ -19,7 +19,7 @@ export default class MovieList {
   constructor(movieListContainer) {
     this._movieListContainer = movieListContainer;
     this._renderMovieCount = FILM_COUNT_PER_STEP;
-    this._currentSortType = null;
+    this._currentSortType = SortType.DEFAULT;
     this._moviePresenter = new Map();
     this._movieList = [];
     this._sitePopUp = null;
@@ -127,14 +127,16 @@ export default class MovieList {
   _sortTasks(sortType) {
     switch (sortType) {
       case SortType.DATE:
-        return this._movieList.sort((a, b) => a.filmYear < b.filmYear && 1 || -1);
+        this._movieList.sort((a, b) => a.filmYear < b.filmYear && 1 || -1);
+        break;
       case SortType.RATING:
-        return this._movieList.sort((a, b) => a.rating < b.rating && 1 || -1);
+        this._movieList.sort((a, b) => a.rating < b.rating && 1 || -1);
+        break;
       default:
         this._movieList = this._sourcedMovieList.slice();
     }
 
-    this._currentSortType = sortType;
+    return this._currentSortType = sortType;
   }
 
   _handleSortTypeChange(sortType) {
