@@ -19,7 +19,7 @@ export default class MovieList {
   constructor(movieListContainer) {
     this._movieListContainer = movieListContainer;
     this._renderMovieCount = FILM_COUNT_PER_STEP;
-    this._currentSortType = SortType.DEFAULT;
+    this._currentSortType = null;
     this._moviePresenter = new Map();
     this._movieList = [];
     this._sitePopUp = null;
