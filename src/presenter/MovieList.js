@@ -8,7 +8,7 @@ import FilmListSection from '../view/site-film-container/film-list-containers/fi
 import {updateItem} from '../view/utils/common';
 import MoviePresenter from './Movie.js';
 import SitePopUpView from '../view/site-popout/site-popup';
-import {SortType} from '../view/utils/const';
+import {Emotion, SortType} from '../view/utils/const';
 import SiteMenuView from '../view/site-menu';
 import SiteSortView from '../view/site-sort';
 
@@ -33,6 +33,7 @@ export default class MovieList {
     this._filmListTopContainer = new SiteFilmListView();
     this._moreButton = new SiteMoreButtonView();
     this._siteSortComponent = new SiteSortView();
+    this._popUpPosition = null;
     this._handleMovieChange = this._handleMovieChange.bind(this);
     this._renderPopUp = this._renderPopUp.bind(this);
     this._onEscKeyUp = this._onEscKeyUp.bind(this);
@@ -41,6 +42,7 @@ export default class MovieList {
     this._setAlreadyWatched = this._setAlreadyWatched.bind(this);
     this._setAddToFavorite = this._setAddToFavorite.bind(this);
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
+    this._handleAddEmoji = this._handleAddEmoji.bind(this);
   }
 
   init(listMovies) {
@@ -149,17 +151,48 @@ export default class MovieList {
     this._renderList();
   }
 
+  _addEmoji(emoji) {
+    const img = document.createElement('img');
+    switch (emoji) {
+      case Emotion.SMILE:
+        img.src = './images/emoji/smile.png';
+        // not a function
+        this._sitePopUp.querySelector('.film-details__add-emoji-label').appendChild(img);
+        break;
+      case Emotion.SLEEPING:
+        img.src = './images/emoji/sleeping.png';
+        this._sitePopUp.querySelector('.film-details__add-emoji-label').appendChild(img);
+        break;
+      case Emotion.PUKE:
+        img.src = './images/emoji/puke.png';
+        this._sitePopUp.querySelector('.film-details__add-emoji-label').appendChild(img);
+        break;
+      case Emotion.ANGRY:
+        img.src = './images/emoji/angry.png';
+        this._sitePopUp.querySelector('.film-details__add-emoji-label').appendChild(img);
+        break;
+      default:
+        remove(this._sitePopUp.querySelector('.film-details__add-emoji-label img'));
+    }
+  }
+
+  _handleAddEmoji(emoji) {
+    this. _addEmoji(emoji);
+    this._clearTaskList();
+    this._renderPopUp();
+  }
+
   _renderPopUp(movie) {
     if (this._sitePopUp) {
       this._closePopUp();
     }
-
     document.addEventListener('keyup', this._onEscKeyUp);
     document.body.classList.add('hide-overflow');
     this._prevSitePopUp = this._sitePopUp;
 
     this._sitePopUp = new SitePopUpView(movie);
-
+    // not a function
+    // this._sitePopUp.scrollTo(0, this._popUpPosition);
     render(this._movieListContainer, this._sitePopUp, RenderPosition.BEFOREEND);
 
     this._sitePopUp.setAddToWatchListHandler(() => this._setAddToWatchList(movie));
@@ -167,6 +200,7 @@ export default class MovieList {
     this._sitePopUp.setAddToFavoritesHandler(() => this._setAddToFavorite(movie));
 
     this._sitePopUp.setCloseButtonHandler(this._closePopUp);
+    this._sitePopUp.setAddEmojiHandler(this._handleAddEmoji);
 
     if(this._prevSitePopUp === null) {
       return render(this._movieListContainer, this._sitePopUp, RenderPosition.BEFOREEND);
@@ -186,17 +220,13 @@ export default class MovieList {
       .forEach((boardTask) => this._renderMovie(boardTask));
   }
 
-  /*_renderSubMovies(from, to) {
-    this._movieList
-      .slice(from, to)
-      .forEach((boardTask) => this._renderMovie(boardTask));
-  }*/
-
   _renderLoadMoreButton() {
     render(this._filmListSection, this._moreButton, RenderPosition.BEFOREEND);
   }
 
   _closePopUp() {
+    // save popup position
+    this._popUpPosition = this._sitePopUp.scrollY;
     remove(this._sitePopUp);
     document.body.classList.remove('hide-overflow');
     this._sitePopUp = null;

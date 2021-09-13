@@ -3,3 +3,10 @@ export const SortType = {
   DATE: 'date',
   RATING: 'rating',
 };
+
+export const Emotion = {
+  SMILE: 'smile',
+  SLEEPING: 'sleeping',
+  PUKE: 'puke',
+  ANGRY: 'angry',
+};

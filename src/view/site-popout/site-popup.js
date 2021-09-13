@@ -1,6 +1,7 @@
 import {createSiteCommentTemplate} from './site-comment';
 import {createSiteGeneresTemplate} from './site-geners';
-import AbstractView from '../abstract.js';
+import Smart from '../smart';
+import {Emotion} from '../utils/const';
 
 const createSitePopUpTemplate = (movie) => {
   const {poster, filmName, rating, filmYear, filmLength, filmGenre, description, comments} = movie;
@@ -96,22 +97,22 @@ const createSitePopUpTemplate = (movie) => {
           <div class="film-details__emoji-list">
             <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-smile" value="smile">
             <label class="film-details__emoji-label" for="emoji-smile">
-              <img src="./images/emoji/smile.png" width="30" height="30" alt="emoji">
+              <img src="./images/emoji/smile.png" width="30" height="30" alt="emoji" data-emotion-type="${Emotion.SMILE}">
             </label>
 
-            <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-sleeping" value="sleeping">
+            <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-sleeping" value="sleeping" >
             <label class="film-details__emoji-label" for="emoji-sleeping">
-              <img src="./images/emoji/sleeping.png" width="30" height="30" alt="emoji">
+              <img src="./images/emoji/sleeping.png" width="30" height="30" alt="emoji" data-emotion-type="${Emotion.SLEEPING}">
             </label>
 
-            <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-puke" value="puke">
+            <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-puke" value="puke" >
             <label class="film-details__emoji-label" for="emoji-puke">
-              <img src="./images/emoji/puke.png" width="30" height="30" alt="emoji">
+              <img src="./images/emoji/puke.png" width="30" height="30" alt="emoji" data-emotion-type="${Emotion.PUKE}">
             </label>
 
-            <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-angry" value="angry">
+            <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-angry" value="angry" >
             <label class="film-details__emoji-label" for="emoji-angry">
-              <img src="./images/emoji/angry.png" width="30" height="30" alt="emoji">
+              <img src="./images/emoji/angry.png" width="30" height="30" alt="emoji" data-emotion-type="${Emotion.ANGRY}">
             </label>
           </div>
         </div>
@@ -121,7 +122,7 @@ const createSitePopUpTemplate = (movie) => {
 </section>`;
 };
 
-export default class PopUp extends AbstractView {
+export default class PopUp extends Smart {
   constructor(card) {
     super();
     this._data = card;
@@ -129,6 +130,7 @@ export default class PopUp extends AbstractView {
     this._clickAddToWatchListHandler = this._clickAddToWatchListHandler.bind(this);
     this._clickAddAlreadyWatchedHandler = this._clickAddAlreadyWatchedHandler.bind(this);
     this._clickAddFavoritesHandler = this._clickAddFavoritesHandler.bind(this);
+    this._clickAddEmojiHandler = this._clickAddEmojiHandler.bind(this);
   }
 
   getTemplate() {
@@ -155,6 +157,14 @@ export default class PopUp extends AbstractView {
     this._callback.addToFavorite();
   }
 
+  _clickAddEmojiHandler(evt) {
+    if (evt.target.tagName !== 'IMG') {
+      return;
+    }
+    evt.preventDefault();
+    this._callback.addEmojiChange(evt.target.dataset.emotionType);
+  }
+
   setCloseButtonHandler(callback) {
     this._callback.click = callback;
     this.getElement().querySelector('.film-details__close-btn').addEventListener('click', this._clickHandler);
@@ -173,5 +183,11 @@ export default class PopUp extends AbstractView {
   setAddToFavoritesHandler(callback) {
     this._callback.addToFavorite = callback;
     this.getElement().querySelector('.film-details__control-button--favorite').addEventListener('click', this._clickAddFavoritesHandler);
+  }
+
+
+  setAddEmojiHandler(callback) {
+    this._callback.addEmojiChange = callback;
+    this.getElement().addEventListener('click', this._clickAddEmojiHandler);
   }
 }
