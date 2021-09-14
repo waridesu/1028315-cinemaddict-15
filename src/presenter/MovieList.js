@@ -152,34 +152,31 @@ export default class MovieList {
   }
 
   _addEmoji(emoji) {
-    const img = document.createElement('img');
+
+    const container = this._sitePopUp.getElement().querySelector('.film-details__add-emoji-label');
+    container.style.backgroundSize = 'contain';
+    container.style.border = 'none';
+    container.style.backgroundColor = 'transparent';
     switch (emoji) {
       case Emotion.SMILE:
-        img.src = './images/emoji/smile.png';
-        // not a function
-        this._sitePopUp.querySelector('.film-details__add-emoji-label').appendChild(img);
+        container.style.backgroundImage = 'url(\'./images/emoji/smile.png\')';
         break;
       case Emotion.SLEEPING:
-        img.src = './images/emoji/sleeping.png';
-        this._sitePopUp.querySelector('.film-details__add-emoji-label').appendChild(img);
+        container.style.backgroundImage = 'url(\'./images/emoji/sleeping.png\')';
         break;
       case Emotion.PUKE:
-        img.src = './images/emoji/puke.png';
-        this._sitePopUp.querySelector('.film-details__add-emoji-label').appendChild(img);
+        container.style.backgroundImage = 'url(\'./images/emoji/puke.png\')';
         break;
       case Emotion.ANGRY:
-        img.src = './images/emoji/angry.png';
-        this._sitePopUp.querySelector('.film-details__add-emoji-label').appendChild(img);
+        container.style.backgroundImage = 'url(\'./images/emoji/angry.png\')';
         break;
       default:
-        remove(this._sitePopUp.querySelector('.film-details__add-emoji-label img'));
+        remove(this._sitePopUp.getElement().querySelector('.film-details__add-emoji-label img'));
     }
   }
 
   _handleAddEmoji(emoji) {
     this. _addEmoji(emoji);
-    this._clearTaskList();
-    this._renderPopUp();
   }
 
   _renderPopUp(movie) {
@@ -191,8 +188,7 @@ export default class MovieList {
     this._prevSitePopUp = this._sitePopUp;
 
     this._sitePopUp = new SitePopUpView(movie);
-    // not a function
-    // this._sitePopUp.scrollTo(0, this._popUpPosition);
+    this._sitePopUp.getElement().scrollTo(0, this._popUpPosition);
     render(this._movieListContainer, this._sitePopUp, RenderPosition.BEFOREEND);
 
     this._sitePopUp.setAddToWatchListHandler(() => this._setAddToWatchList(movie));
@@ -225,8 +221,7 @@ export default class MovieList {
   }
 
   _closePopUp() {
-    // save popup position
-    this._popUpPosition = this._sitePopUp.scrollY;
+    this._popUpPosition = this._sitePopUp.getElement().scrollY;
     remove(this._sitePopUp);
     document.body.classList.remove('hide-overflow');
     this._sitePopUp = null;
