@@ -133,7 +133,6 @@ export default class PopUp extends Smart {
       text: '',
       author: 'Don Joe',
       commentaryDate: dayjs().format('LLL'),
-      position: '',
     };
     this._scrollPositon = 0;
     this._clickHandler = this._clickHandler.bind(this);
@@ -164,23 +163,20 @@ export default class PopUp extends Smart {
   }
 
   _clickAddToWatchListHandler(evt) {
-    this.updateData({position: this.getElement().scrollTop});
-
+    this._scrollPositon = this.getElement().scrollTop;
     evt.preventDefault();
     this._callback.addToWatchList();
 
   }
 
   _clickAddAlreadyWatchedHandler(evt) {
-    this.updateData({position: this.getElement().scrollTop});
+    this._scrollPositon = this.getElement().scrollTop;
     evt.preventDefault();
-
     this._callback.addToAlreadyWatched();
-
   }
 
   _clickAddFavoritesHandler(evt) {
-    this.updateData({position: this.getElement().scrollTop});
+    this._scrollPositon = this.getElement().scrollTop;
     evt.preventDefault();
     this._callback.addToFavorite();
   }

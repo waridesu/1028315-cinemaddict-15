@@ -196,7 +196,7 @@ export default class MovieList {
   }
 
   _closePopUp() {
-    this._popUpPosition = this._sitePopUp._data.position;
+    this._popUpPosition = this._sitePopUp._popUpPosition;
     remove(this._sitePopUp);
     document.body.classList.remove('hide-overflow');
     this._sitePopUp = null;
