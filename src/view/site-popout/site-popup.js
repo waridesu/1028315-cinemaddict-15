@@ -1,9 +1,9 @@
 import {createSiteCommentTemplate} from './site-comment';
 import {createSiteGeneresTemplate} from './site-geners';
 import Smart from '../smart';
-import {Emotion} from '../utils/const';
+import dayjs from 'dayjs';
 
-const createSitePopUpTemplate = (movie) => {
+const createSitePopUpTemplate = (movie, state) => {
   const {poster, filmName, rating, filmYear, filmLength, filmGenre, description, comments} = movie;
   let commentsNumber = 0;
   if (comments.length) {
@@ -88,7 +88,9 @@ const createSitePopUpTemplate = (movie) => {
         </ul>
 
         <div class="film-details__new-comment">
-          <div class="film-details__add-emoji-label"></div>
+          <div class="film-details__add-emoji-label">
+          ${state.emoji? `<img src="./images/emoji/${state.emoji}.png" width="100%" height="100%" alt="emoji"/>` : ''}
+          </div>
 
           <label class="film-details__comment-label">
             <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment"></textarea>
@@ -97,22 +99,22 @@ const createSitePopUpTemplate = (movie) => {
           <div class="film-details__emoji-list">
             <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-smile" value="smile">
             <label class="film-details__emoji-label" for="emoji-smile">
-              <img src="./images/emoji/smile.png" width="30" height="30" alt="emoji" data-emotion-type="${Emotion.SMILE}">
+              <img src="./images/emoji/smile.png" width="30" height="30" alt="emoji" >
             </label>
 
-            <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-sleeping" value="sleeping" >
+            <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-sleeping" value="sleeping">
             <label class="film-details__emoji-label" for="emoji-sleeping">
-              <img src="./images/emoji/sleeping.png" width="30" height="30" alt="emoji" data-emotion-type="${Emotion.SLEEPING}">
+              <img src="./images/emoji/sleeping.png" width="30" height="30" alt="emoji" >
             </label>
 
-            <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-puke" value="puke" >
+            <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-puke" value="puke">
             <label class="film-details__emoji-label" for="emoji-puke">
-              <img src="./images/emoji/puke.png" width="30" height="30" alt="emoji" data-emotion-type="${Emotion.PUKE}">
+              <img src="./images/emoji/puke.png" width="30" height="30" alt="emoji" >
             </label>
 
-            <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-angry" value="angry" >
+            <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-angry" value="angry">
             <label class="film-details__emoji-label" for="emoji-angry">
-              <img src="./images/emoji/angry.png" width="30" height="30" alt="emoji" data-emotion-type="${Emotion.ANGRY}">
+              <img src="./images/emoji/angry.png" width="30" height="30" alt="emoji" >
             </label>
           </div>
         </div>
@@ -125,16 +127,35 @@ const createSitePopUpTemplate = (movie) => {
 export default class PopUp extends Smart {
   constructor(card) {
     super();
-    this._data = card;
+    this._card = card;
+    this._data = {
+      emoji: '',
+      text: '',
+      author: 'Don Joe',
+      commentaryDate: dayjs().format('LLL'),
+      position: '',
+    };
+    this._scrollPositon = 0;
     this._clickHandler = this._clickHandler.bind(this);
     this._clickAddToWatchListHandler = this._clickAddToWatchListHandler.bind(this);
     this._clickAddAlreadyWatchedHandler = this._clickAddAlreadyWatchedHandler.bind(this);
     this._clickAddFavoritesHandler = this._clickAddFavoritesHandler.bind(this);
     this._clickAddEmojiHandler = this._clickAddEmojiHandler.bind(this);
+    this._clickSendHandler = this._clickSendHandler.bind(this);
   }
 
   getTemplate() {
-    return createSitePopUpTemplate(this._data);
+    return createSitePopUpTemplate(this._card, this._data);
+  }
+
+  restoreHandlers() {
+    this.getElement().scrollTo(0, this._scrollPositon);
+    this.setCloseButtonHandler(this._callback.click);
+    this.setAddToWatchListHandler(this._callback.addToWatchList);
+    this.setAlreadyWatchedHandler(this._callback.addToAlreadyWatched);
+    this.setAddToFavoritesHandler(this._callback.addToFavorite);
+    this.setAddEmojiHandler(this._callback.addEmojiChange);
+    this.setTextArea(this._callback.textArea);
   }
 
   _clickHandler(evt) {
@@ -143,26 +164,60 @@ export default class PopUp extends Smart {
   }
 
   _clickAddToWatchListHandler(evt) {
+    this.updateData({position: this.getElement().scrollTop});
+
     evt.preventDefault();
     this._callback.addToWatchList();
+
   }
 
   _clickAddAlreadyWatchedHandler(evt) {
+    this.updateData({position: this.getElement().scrollTop});
     evt.preventDefault();
+
     this._callback.addToAlreadyWatched();
+
   }
 
   _clickAddFavoritesHandler(evt) {
+    this.updateData({position: this.getElement().scrollTop});
     evt.preventDefault();
     this._callback.addToFavorite();
   }
 
   _clickAddEmojiHandler(evt) {
-    if (evt.target.tagName !== 'IMG') {
+    this._scrollPositon = this.getElement().scrollTop;
+    if (evt.target.tagName !== 'INPUT') {
       return;
     }
     evt.preventDefault();
-    this._callback.addEmojiChange(evt.target.dataset.emotionType);
+    this.updateData({emoji:evt.target.value});
+  }
+
+  _clickSendHandler(evt) {
+    this._scrollPositon = this.getElement().scrollTop;
+    if(evt.ctrlKey && (evt.keyCode === 13 || evt.keyCode === 10)) {
+      this.updateData({text:evt.target.value}, true);
+      const message = `<li class="film-details__comment">
+    ${this._data.emoji
+    ? `<span class="film-details__comment-emoji">
+          <img src="./images/emoji/${this._data.emoji}.png" width="55" height="55" alt="emoji-smile">
+       </span>`
+    : `<span class="film-details__comment-emoji">
+          <div style="width: 55px; height: 55px"></div>
+      </span>`}
+       <div>
+          <p class="film-details__comment-text">${this._data.text}</p>
+          <p class="film-details__comment-info">
+             <span class="film-details__comment-author">${this._data.author}</span>
+             <span class="film-details__comment-day">${this._data.commentaryDate}</span>
+             <button class="film-details__comment-delete">Delete</button>
+          </p>
+       </div>
+    </li>`;
+      this.getElement().querySelector('.film-details__comments-list').insertAdjacentHTML('beforeend',message);
+      evt.target.value = '';
+    }
   }
 
   setCloseButtonHandler(callback) {
@@ -189,5 +244,10 @@ export default class PopUp extends Smart {
   setAddEmojiHandler(callback) {
     this._callback.addEmojiChange = callback;
     this.getElement().addEventListener('click', this._clickAddEmojiHandler);
+  }
+
+  setTextArea(callback) {
+    this._callback.textArea = callback;
+    this.getElement().addEventListener('keyup', this._clickSendHandler);
   }
 }

@@ -8,7 +8,7 @@ import FilmListSection from '../view/site-film-container/film-list-containers/fi
 import {updateItem} from '../view/utils/common';
 import MoviePresenter from './Movie.js';
 import SitePopUpView from '../view/site-popout/site-popup';
-import {Emotion, SortType} from '../view/utils/const';
+import {SortType} from '../view/utils/const';
 import SiteMenuView from '../view/site-menu';
 import SiteSortView from '../view/site-sort';
 
@@ -33,7 +33,7 @@ export default class MovieList {
     this._filmListTopContainer = new SiteFilmListView();
     this._moreButton = new SiteMoreButtonView();
     this._siteSortComponent = new SiteSortView();
-    this._popUpPosition = null;
+    this._popUpPosition = 0;
     this._handleMovieChange = this._handleMovieChange.bind(this);
     this._renderPopUp = this._renderPopUp.bind(this);
     this._onEscKeyUp = this._onEscKeyUp.bind(this);
@@ -42,7 +42,7 @@ export default class MovieList {
     this._setAlreadyWatched = this._setAlreadyWatched.bind(this);
     this._setAddToFavorite = this._setAddToFavorite.bind(this);
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
-    this._handleAddEmoji = this._handleAddEmoji.bind(this);
+    this._handleSendComment = this._handleSendComment.bind(this);
   }
 
   init(listMovies) {
@@ -91,6 +91,7 @@ export default class MovieList {
       },
       ),
     );
+    this._sitePopUp.getElement().scrollTo(0, this._popUpPosition);
   }
 
   _setAlreadyWatched(movie) {
@@ -104,6 +105,7 @@ export default class MovieList {
       },
       ),
     );
+    this._sitePopUp.getElement().scrollTo(0, this._popUpPosition);
   }
 
   _setAddToFavorite(movie) {
@@ -117,6 +119,7 @@ export default class MovieList {
       },
       ),
     );
+    this._sitePopUp.getElement().scrollTo(0, this._popUpPosition);
   }
 
   _clearTaskList() {
@@ -151,34 +154,6 @@ export default class MovieList {
     this._renderList();
   }
 
-  _addEmoji(emoji) {
-
-    const container = this._sitePopUp.getElement().querySelector('.film-details__add-emoji-label');
-    container.style.backgroundSize = 'contain';
-    container.style.border = 'none';
-    container.style.backgroundColor = 'transparent';
-    switch (emoji) {
-      case Emotion.SMILE:
-        container.style.backgroundImage = 'url(\'./images/emoji/smile.png\')';
-        break;
-      case Emotion.SLEEPING:
-        container.style.backgroundImage = 'url(\'./images/emoji/sleeping.png\')';
-        break;
-      case Emotion.PUKE:
-        container.style.backgroundImage = 'url(\'./images/emoji/puke.png\')';
-        break;
-      case Emotion.ANGRY:
-        container.style.backgroundImage = 'url(\'./images/emoji/angry.png\')';
-        break;
-      default:
-        remove(this._sitePopUp.getElement().querySelector('.film-details__add-emoji-label img'));
-    }
-  }
-
-  _handleAddEmoji(emoji) {
-    this. _addEmoji(emoji);
-  }
-
   _renderPopUp(movie) {
     if (this._sitePopUp) {
       this._closePopUp();
@@ -188,7 +163,7 @@ export default class MovieList {
     this._prevSitePopUp = this._sitePopUp;
 
     this._sitePopUp = new SitePopUpView(movie);
-    this._sitePopUp.getElement().scrollTo(0, this._popUpPosition);
+
     render(this._movieListContainer, this._sitePopUp, RenderPosition.BEFOREEND);
 
     this._sitePopUp.setAddToWatchListHandler(() => this._setAddToWatchList(movie));
@@ -196,7 +171,8 @@ export default class MovieList {
     this._sitePopUp.setAddToFavoritesHandler(() => this._setAddToFavorite(movie));
 
     this._sitePopUp.setCloseButtonHandler(this._closePopUp);
-    this._sitePopUp.setAddEmojiHandler(this._handleAddEmoji);
+    this._sitePopUp.setAddEmojiHandler();
+    this._sitePopUp.setTextArea();
 
     if(this._prevSitePopUp === null) {
       return render(this._movieListContainer, this._sitePopUp, RenderPosition.BEFOREEND);
@@ -221,7 +197,7 @@ export default class MovieList {
   }
 
   _closePopUp() {
-    this._popUpPosition = this._sitePopUp.getElement().scrollY;
+    this._popUpPosition = this._sitePopUp._data.position;
     remove(this._sitePopUp);
     document.body.classList.remove('hide-overflow');
     this._sitePopUp = null;
