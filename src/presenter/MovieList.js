@@ -42,7 +42,6 @@ export default class MovieList {
     this._setAlreadyWatched = this._setAlreadyWatched.bind(this);
     this._setAddToFavorite = this._setAddToFavorite.bind(this);
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
-    this._handleSendComment = this._handleSendComment.bind(this);
   }
 
   init(listMovies) {
