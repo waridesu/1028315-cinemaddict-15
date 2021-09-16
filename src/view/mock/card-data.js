@@ -1,4 +1,6 @@
 import {nanoid} from 'nanoid';
+import dayjs from 'dayjs';
+import localizedFormat from 'dayjs/plugin/localizedFormat';
 
 const getRandomInteger = (a = 0, b = 1) => {
   const lower = Math.ceil(Math.min(a, b));
@@ -41,15 +43,17 @@ const generateFilmName = () => {
 
 const generateRating = () => getRandomInteger(0, 10);
 
+dayjs.extend(localizedFormat);
+
 const generateFilmYear = () => {
   const filmYears = [
-    '1936',
-    '1937',
-    '1940',
-    '1925',
-    '1955',
-    '1945',
-    '1964',
+    dayjs().year(1990).format('YYYY'),
+    dayjs().year(1992).format('YYYY'),
+    dayjs().year(1994).format('YYYY'),
+    dayjs().year(1996).format('YYYY'),
+    dayjs().year(1998).format('YYYY'),
+    dayjs().year(2000).format('YYYY'),
+    dayjs().year(2002).format('YYYY'),
   ];
 
   return getRandomArrayElement(filmYears);
@@ -99,11 +103,11 @@ const generateDescription = () => {
 
 const generateComments = () => {
   const comments = [
-    {text: 'Not good, not bad', emoji: '', author: 'Don Joe', commentaryDate: '2019/12/31 1:59'},
-    {text: 'Film boring', emoji: './images/emoji/sleeping.png', author: 'Anthony Joe', commentaryDate: '2019/12/31 3:50'},
-    {text: 'Afoul film', emoji: './images/emoji/angry.png', author: 'Don Willis', commentaryDate: '2019/12/31 18:42'},
-    {text: 'Funny plot', emoji: './images/emoji/smile.png', author: 'Adam Kennedy', commentaryDate: '2019/12/31 10:20'},
-    {text: 'For no one ', emoji: './images/emoji/puke.png', author: 'Selina Goes', commentaryDate: '2019/12/31 12:11'},
+    {text: 'Not good, not bad', emoji: '', author: 'Don Joe', commentaryDate: dayjs('2020-01-25').format('LLL')},
+    {text: 'Film boring', emoji: './images/emoji/sleeping.png', author: 'Anthony Joe', commentaryDate: dayjs('2020-04-25').format('LLL')},
+    {text: 'Afoul film', emoji: './images/emoji/angry.png', author: 'Don Willis', commentaryDate: dayjs('2019-07-25').format('LLL')},
+    {text: 'Funny plot', emoji: './images/emoji/smile.png', author: 'Adam Kennedy', commentaryDate: dayjs('2019-09-25').format('LLL')},
+    {text: 'For no one ', emoji: './images/emoji/puke.png', author: 'Selina Goes', commentaryDate: dayjs('2019-11-25').format('LLL')},
   ];
 
   const randomIndex = getRandomInteger(0, comments.length - 1);

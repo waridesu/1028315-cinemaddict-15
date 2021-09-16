@@ -33,6 +33,7 @@ export default class MovieList {
     this._filmListTopContainer = new SiteFilmListView();
     this._moreButton = new SiteMoreButtonView();
     this._siteSortComponent = new SiteSortView();
+    this._popUpPosition = 0;
     this._handleMovieChange = this._handleMovieChange.bind(this);
     this._renderPopUp = this._renderPopUp.bind(this);
     this._onEscKeyUp = this._onEscKeyUp.bind(this);
@@ -89,6 +90,7 @@ export default class MovieList {
       },
       ),
     );
+    this._sitePopUp.getElement().scrollTo(0, this._popUpPosition);
   }
 
   _setAlreadyWatched(movie) {
@@ -102,6 +104,7 @@ export default class MovieList {
       },
       ),
     );
+    this._sitePopUp.getElement().scrollTo(0, this._popUpPosition);
   }
 
   _setAddToFavorite(movie) {
@@ -115,6 +118,7 @@ export default class MovieList {
       },
       ),
     );
+    this._sitePopUp.getElement().scrollTo(0, this._popUpPosition);
   }
 
   _clearTaskList() {
@@ -153,7 +157,6 @@ export default class MovieList {
     if (this._sitePopUp) {
       this._closePopUp();
     }
-
     document.addEventListener('keyup', this._onEscKeyUp);
     document.body.classList.add('hide-overflow');
     this._prevSitePopUp = this._sitePopUp;
@@ -167,6 +170,9 @@ export default class MovieList {
     this._sitePopUp.setAddToFavoritesHandler(() => this._setAddToFavorite(movie));
 
     this._sitePopUp.setCloseButtonHandler(this._closePopUp);
+    this._sitePopUp.setAddEmojiHandler();
+    this._sitePopUp.setTextareaHandler();
+    this._sitePopUp.setDescriptionTextareaHandler();
 
     if(this._prevSitePopUp === null) {
       return render(this._movieListContainer, this._sitePopUp, RenderPosition.BEFOREEND);
@@ -186,17 +192,12 @@ export default class MovieList {
       .forEach((boardTask) => this._renderMovie(boardTask));
   }
 
-  /*_renderSubMovies(from, to) {
-    this._movieList
-      .slice(from, to)
-      .forEach((boardTask) => this._renderMovie(boardTask));
-  }*/
-
   _renderLoadMoreButton() {
     render(this._filmListSection, this._moreButton, RenderPosition.BEFOREEND);
   }
 
   _closePopUp() {
+    this._popUpPosition = this._sitePopUp._popUpPosition;
     remove(this._sitePopUp);
     document.body.classList.remove('hide-overflow');
     this._sitePopUp = null;
