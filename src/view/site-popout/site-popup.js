@@ -241,6 +241,6 @@ export default class PopUp extends Smart {
 
   setFormSubmitHandler(callback) {
     this._callback.formSubmit = callback;
-    this.getElement().addEventListener('keyup', this._clickSendHandler);
+    this.getElement().querySelector('form').addEventListener('submit', this._clickSendHandler);
   }
 }
