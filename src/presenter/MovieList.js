@@ -171,7 +171,8 @@ export default class MovieList {
 
     this._sitePopUp.setCloseButtonHandler(this._closePopUp);
     this._sitePopUp.setAddEmojiHandler();
-    this._sitePopUp.setTextArea();
+    this._sitePopUp.setTextareaHandler();
+    this._sitePopUp.setDescriptionTextareaHandler();
 
     if(this._prevSitePopUp === null) {
       return render(this._movieListContainer, this._sitePopUp, RenderPosition.BEFOREEND);

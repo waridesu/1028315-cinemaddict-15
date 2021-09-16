@@ -89,11 +89,11 @@ const createSitePopUpTemplate = (movie, state) => {
 
         <div class="film-details__new-comment">
           <div class="film-details__add-emoji-label">
-          ${state.emoji? `<img src="./images/emoji/${state.emoji}.png" width="100%" height="100%" alt="emoji"/>` : ''}
+          ${state.emoji ? `<img src="./images/emoji/${state.emoji}.png" width="100%" height="100%" alt="emoji"/>` : ''}
           </div>
 
           <label class="film-details__comment-label">
-            <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment"></textarea>
+            <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment">${state.description}</textarea>
           </label>
 
           <div class="film-details__emoji-list">
@@ -130,7 +130,7 @@ export default class PopUp extends Smart {
     this._card = card;
     this._data = {
       emoji: '',
-      text: '',
+      description: '',
       author: 'Don Joe',
       commentaryDate: dayjs().format('LLL'),
     };
@@ -141,6 +141,7 @@ export default class PopUp extends Smart {
     this._clickAddFavoritesHandler = this._clickAddFavoritesHandler.bind(this);
     this._clickAddEmojiHandler = this._clickAddEmojiHandler.bind(this);
     this._clickSendHandler = this._clickSendHandler.bind(this);
+    this._descriptionTextAreaHandler = this._descriptionTextAreaHandler.bind(this);
   }
 
   getTemplate() {
@@ -154,7 +155,16 @@ export default class PopUp extends Smart {
     this.setAlreadyWatchedHandler(this._callback.addToAlreadyWatched);
     this.setAddToFavoritesHandler(this._callback.addToFavorite);
     this.setAddEmojiHandler(this._callback.addEmojiChange);
-    this.setTextArea(this._callback.textArea);
+    this.setDescriptionTextareaHandler(this._callback.descriptionTextarea);
+    this.setTextareaHandler(this._callback.textArea);
+  }
+
+  _descriptionTextAreaHandler(evt) {
+    this._scrollPositon = this.getElement().scrollTop;
+    evt.preventDefault();
+    this.updateData({
+      description: evt.target.value,
+    }, true);
   }
 
   _clickHandler(evt) {
@@ -193,26 +203,7 @@ export default class PopUp extends Smart {
   _clickSendHandler(evt) {
     this._scrollPositon = this.getElement().scrollTop;
     if(evt.ctrlKey && (evt.keyCode === 13 || evt.keyCode === 10)) {
-      this.updateData({text:evt.target.value}, true);
-      const message = `<li class="film-details__comment">
-    ${this._data.emoji
-    ? `<span class="film-details__comment-emoji">
-          <img src="./images/emoji/${this._data.emoji}.png" width="55" height="55" alt="emoji-smile">
-       </span>`
-    : `<span class="film-details__comment-emoji">
-          <div style="width: 55px; height: 55px"></div>
-      </span>`}
-       <div>
-          <p class="film-details__comment-text">${this._data.text}</p>
-          <p class="film-details__comment-info">
-             <span class="film-details__comment-author">${this._data.author}</span>
-             <span class="film-details__comment-day">${this._data.commentaryDate}</span>
-             <button class="film-details__comment-delete">Delete</button>
-          </p>
-       </div>
-    </li>`;
-      this.getElement().querySelector('.film-details__comments-list').insertAdjacentHTML('beforeend',message);
-      evt.target.value = '';
+      this.updateData({description: ''});
     }
   }
 
@@ -239,11 +230,17 @@ export default class PopUp extends Smart {
 
   setAddEmojiHandler(callback) {
     this._callback.addEmojiChange = callback;
-    this.getElement().addEventListener('click', this._clickAddEmojiHandler);
+    this.getElement().querySelector('.film-details__emoji-list').addEventListener('click', this._clickAddEmojiHandler);
   }
 
-  setTextArea(callback) {
+  setDescriptionTextareaHandler(callback) {
+    this._callback.descriptionTextarea = callback;
+    this.getElement().querySelector('.film-details__comment-input').addEventListener('input', this._descriptionTextAreaHandler);
+
+  }
+
+  setTextareaHandler(callback) {
     this._callback.textArea = callback;
-    this.getElement().addEventListener('keyup', this._clickSendHandler);
+    this.getElement().querySelector('.film-details__comment-input').addEventListener('keyup', this._clickSendHandler);
   }
 }
