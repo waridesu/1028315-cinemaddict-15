@@ -156,7 +156,7 @@ export default class PopUp extends Smart {
     this.setAddToFavoritesHandler(this._callback.addToFavorite);
     this.setAddEmojiHandler(this._callback.addEmojiChange);
     this.setDescriptionTextareaHandler(this._callback.descriptionTextarea);
-    this.setTextareaHandler(this._callback.textArea);
+    this.setFormSubmitHandler(this._callback.formSubmit);
   }
 
   _descriptionTextAreaHandler(evt) {
@@ -239,8 +239,8 @@ export default class PopUp extends Smart {
 
   }
 
-  setTextareaHandler(callback) {
-    this._callback.textArea = callback;
-    this.getElement().querySelector('.film-details__comment-input').addEventListener('keyup', this._clickSendHandler);
+  setFormSubmitHandler(callback) {
+    this._callback.formSubmit = callback;
+    this.getElement().addEventListener('keyup', this._clickSendHandler);
   }
 }
