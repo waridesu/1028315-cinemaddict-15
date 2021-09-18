@@ -2,6 +2,7 @@ import {createSiteCommentTemplate} from './site-comment';
 import {createSiteGeneresTemplate} from './site-geners';
 import Smart from '../smart';
 import dayjs from 'dayjs';
+import he from 'he';
 
 const createSitePopUpTemplate = (movie, state) => {
   const {poster, filmName, rating, filmYear, filmLength, filmGenre, description, comments} = movie;
@@ -93,7 +94,7 @@ const createSitePopUpTemplate = (movie, state) => {
           </div>
 
           <label class="film-details__comment-label">
-            <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment">${state.description}</textarea>
+            <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment">${he.encode(state.description)}</textarea>
           </label>
 
           <div class="film-details__emoji-list">

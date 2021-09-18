@@ -6,14 +6,12 @@ import FilmListTop from '../view/site-film-container/film-list-containers/film-s
 import FilmListMost from '../view/site-film-container/film-list-containers/film-section-most';
 import FilmListSection from '../view/site-film-container/film-list-containers/film-section';
 import MoviePresenter from './Movie.js';
+import FilterPresenter from './Filter.js';
 import SitePopUpView from '../view/site-popout/site-popup';
 import {SortType, UpdateType, UserAction} from '../view/utils/const';
-import SiteMenuView from '../view/site-menu';
-import SiteSortView from '../view/site-sort';
 import NoMovies from '../view/site-film-container/list-empty.js';
 import {sort} from '../view/utils/sort';
 const FILM_COUNT_PER_STEP = 5;
-// const SUB_FILM_COUNT_PER_STEP = 2;
 
 export default class MovieList {
   constructor(movieListContainer, moviesModel, filterModel) {
@@ -33,6 +31,7 @@ export default class MovieList {
     this._filmListTopContainer = new SiteFilmListView();
     this._filterType = SortType.DEFAULT;
     this._filterModel = filterModel;
+
     this._moreButtonComponent = null;
     this._siteSortComponent = null;
     this._noMovieComponent = null;
@@ -55,9 +54,6 @@ export default class MovieList {
   }
 
   init() {
-    this._siteMenuComponent = new SiteMenuView(this._getMovies());
-
-    render(this._movieListContainer, this._siteMenuComponent, RenderPosition.BEFOREEND);
 
     render(this._movieListContainer, this._siteFilmContainerComponent, RenderPosition.BEFOREEND);
 
@@ -79,10 +75,10 @@ export default class MovieList {
         this._moviesModel.updateMovie(updateType, update);
         break;
       case UserAction.ADD_COMMENT:
-        this._moviesModel.addComentary(updateType, update);
+        this._moviesModel.addCommentary(updateType, update);
         break;
       case UserAction.DELETE_COMMENT:
-        this._moviesModel.deleteComentary(updateType, update);
+        this._moviesModel.deleteCommentary(updateType, update);
         break;
     }
   }
@@ -171,14 +167,8 @@ export default class MovieList {
   }
 
   _renderSort() {
-    if (this._siteSortComponent !== null) {
-      this._siteSortComponent = null;
-    }
-
-    this._siteSortComponent = new SiteSortView(this._currentSortType);
-    this._siteSortComponent.setSortTypeChangeHandler(this._handleSortTypeChange);
-
-    render(this._movieListContainer, this._siteSortComponent, RenderPosition.AFTERBEGIN);
+    const filterPresenter = new FilterPresenter(this._movieListContainer, this._moviesModel, this._filterModel, this._getMovies(), this._handleSortTypeChange);
+    filterPresenter.init();
   }
 
   _renderPopUp(movie) {

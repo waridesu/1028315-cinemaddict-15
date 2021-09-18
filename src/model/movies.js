@@ -31,7 +31,7 @@ export default class Movies extends AbstractObserver {
   }
 
   // I know that wrong, but dont know how right
-  addComentary(updateType, update) {
+  addCommentary(updateType, update) {
     this._movies = [
       update,
       ...this._movies,
@@ -41,7 +41,7 @@ export default class Movies extends AbstractObserver {
   }
 
   // same here
-  deleteComentary(updateType, update) {
+  deleteCommentary(updateType, update) {
     const index = this._movies.findIndex((task) => task.id === update.id);
 
     if (index === -1) {

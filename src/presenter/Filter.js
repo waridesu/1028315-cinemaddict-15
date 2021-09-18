@@ -2,31 +2,38 @@ import FilterView from '../view/site-sort';
 import {render, RenderPosition, replace, remove} from '../view/utils/render';
 import {SortType, UpdateType} from '../view/utils/const.js';
 import {sort} from '../view/utils/sort';
+import SiteMenuView from '../view/site-menu';
 
 export default class Filter {
-  constructor(filterContainer, filterModel, tasksModel) {
+  constructor(filterContainer, moviesModel, filterModel,siteMenuData, sortHandler) {
     this._filterContainer = filterContainer;
+    this._moviesModel = moviesModel;
     this._filterModel = filterModel;
-    this._tasksModel = tasksModel;
+    this._menuData = siteMenuData;
+    this._sortTypeHandler = sortHandler;
 
+    this._siteMenuComponent= null;
     this._filterComponent = null;
 
     this._handleModelEvent = this._handleModelEvent.bind(this);
     this._handleFilterTypeChange = this._handleFilterTypeChange.bind(this);
 
-    this._tasksModel.addObserver(this._handleModelEvent);
+    this._moviesModel.addObserver(this._handleModelEvent);
     this._filterModel.addObserver(this._handleModelEvent);
   }
 
   init() {
-    const filters = this._getFilters();
+    const filters = this._menuData;
     const prevFilterComponent = this._filterComponent;
-
+    this._siteMenuComponent = new SiteMenuView(this._menuData);
     this._filterComponent = new FilterView(filters, this._filterModel.getFilter());
+    // don't know with all this filtering and it's still filtering watchlist, history, favorites and all
     this._filterComponent.setSortTypeChangeHandler(this._handleFilterTypeChange);
 
     if (prevFilterComponent === null) {
-      return render(this._filterContainer, this._filterComponent, RenderPosition.BEFOREEND);
+      render(this._filterContainer, this._filterComponent, RenderPosition.AFTERBEGIN);
+      render(this._filterContainer, this._siteMenuComponent, RenderPosition.AFTERBEGIN);
+      return;
     }
 
     replace(this._filterComponent, prevFilterComponent);
@@ -46,7 +53,7 @@ export default class Filter {
   }
 
   _getFilters() {
-    const tasks = this._tasksModel.getMovies();
+    const tasks = this._moviesModel.getMovies();
 
     return [
       {
