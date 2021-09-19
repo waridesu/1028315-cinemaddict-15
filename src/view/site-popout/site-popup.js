@@ -150,7 +150,6 @@ export default class PopUp extends Smart {
   }
 
   restoreHandlers() {
-    this.getElement().scrollTo(0, this._scrollPositon);
     this.setCloseButtonHandler(this._callback.click);
     this.setAddToWatchListHandler(this._callback.addToWatchList);
     this.setAlreadyWatchedHandler(this._callback.addToAlreadyWatched);
@@ -158,6 +157,8 @@ export default class PopUp extends Smart {
     this.setAddEmojiHandler(this._callback.addEmojiChange);
     this.setDescriptionTextareaHandler(this._callback.descriptionTextarea);
     this.setFormSubmitHandler(this._callback.formSubmit);
+    this.getElement().scrollTo(0, this._scrollPositon);
+
   }
 
   _descriptionTextAreaHandler(evt) {
