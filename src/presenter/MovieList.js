@@ -116,6 +116,8 @@ export default class MovieList {
 
   _setAddToWatchList(movie) {
     this._handleViewAction(
+      UserAction.UPDATE_MOVIE,
+      UpdateType.MINOR,
       Object.assign({}, movie, {
         'user_details': {
           watchlist: !movie.user_details.watchlist,
@@ -125,11 +127,12 @@ export default class MovieList {
       },
       ),
     );
-    this._sitePopUp.getElement().scrollTo(0, this._popUpPosition);
   }
 
   _setAlreadyWatched(movie) {
     this._handleViewAction(
+      UserAction.UPDATE_MOVIE,
+      UpdateType.MINOR,
       Object.assign({}, movie, {
         'user_details': {
           watchlist: movie.user_details.watchlist,
@@ -139,11 +142,12 @@ export default class MovieList {
       },
       ),
     );
-    this._sitePopUp.getElement().scrollTo(0, this._popUpPosition);
   }
 
   _setAddToFavorite(movie) {
     this._handleViewAction(
+      UserAction.UPDATE_MOVIE,
+      UpdateType.MINOR,
       Object.assign({}, movie, {
         'user_details': {
           watchlist: movie.user_details.watchlist,
@@ -153,7 +157,6 @@ export default class MovieList {
       },
       ),
     );
-    this._sitePopUp.getElement().scrollTo(0, this._popUpPosition);
   }
 
   _handleSortTypeChange(sortType) {
@@ -182,6 +185,8 @@ export default class MovieList {
     this._sitePopUp = new SitePopUpView(movie);
 
     render(this._movieListContainer, this._sitePopUp, RenderPosition.BEFOREEND);
+    // need to scroll but i can't put it anywhere
+    this._sitePopUp.getElement().scrollTo(0, this._sitePopUp._scrollPositon);
 
     this._sitePopUp.setAddToWatchListHandler(() => this._setAddToWatchList(movie));
     this._sitePopUp.setAlreadyWatchedHandler(() => this._setAlreadyWatched(movie));
@@ -225,7 +230,6 @@ export default class MovieList {
   }
 
   _closePopUp() {
-    this._popUpPosition = this._sitePopUp._scrollPositon;
     remove(this._sitePopUp);
     document.body.classList.remove('hide-overflow');
     this._sitePopUp = null;
@@ -267,9 +271,6 @@ export default class MovieList {
     if (resetRenderedMovieCount) {
       this._renderMovieCount = FILM_COUNT_PER_STEP;
     } else {
-      // На случай, если перерисовка доски вызвана
-      // уменьшением количества задач (например, удаление или перенос в архив)
-      // нужно скорректировать число показанных задач
       this._renderMovieCount = Math.min(movieCount, this._renderMovieCount);
     }
 
