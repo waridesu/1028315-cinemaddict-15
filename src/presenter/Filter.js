@@ -1,8 +1,8 @@
-import FilterView from '../view/site-sort';
+import SortView from '../view/site-sort';
 import {render, RenderPosition, replace, remove} from '../view/utils/render';
-import {SortType, UpdateType} from '../view/utils/const.js';
-import {sort} from '../view/utils/sort';
-import SiteMenuView from '../view/site-menu';
+import {FilterType, SortType, UpdateType} from '../view/utils/const.js';
+import {filter, sort} from '../view/utils/sort';
+import FilterView from '../view/site-filter';
 
 export default class Filter {
   constructor(filterContainer, moviesModel, filterModel) {
@@ -10,8 +10,8 @@ export default class Filter {
     this._moviesModel = moviesModel;
     this._filterModel = filterModel;
 
-    this._siteMenuComponent= null;
     this._filterComponent = null;
+    this._sortComponent = null;
 
     this._handleModelEvent = this._handleModelEvent.bind(this);
     this._handleFilterTypeChange = this._handleFilterTypeChange.bind(this);
@@ -21,24 +21,23 @@ export default class Filter {
   }
 
   init() {
-    const filter = this._getFilters();
+    const prevSortComponent = this._sortComponent;
     const prevFilterComponent = this._filterComponent;
-    const prevMenuComponent = this._siteMenuComponent;
-    this._siteMenuComponent = new SiteMenuView(this._moviesModel.getMovies());
-    this._filterComponent = new FilterView(filter, this._filterModel.getFilter());
+    this._filterComponent = new FilterView(this._moviesModel.getMovies(), this._getFilter(), this._filterModel.getFilter());
+    this._sortComponent = new SortView(this._getSorts(), this._filterModel.getFilter());
 
-    this._filterComponent.setSortTypeChangeHandler(this._handleFilterTypeChange);
+    this._sortComponent.setSortTypeChangeHandler(this._handleFilterTypeChange);
 
-    if (prevFilterComponent === null) {
+    if (prevSortComponent === null) {
+      render(this._filterContainer, this._sortComponent, RenderPosition.AFTERBEGIN);
       render(this._filterContainer, this._filterComponent, RenderPosition.AFTERBEGIN);
-      render(this._filterContainer, this._siteMenuComponent, RenderPosition.AFTERBEGIN);
       return;
     }
 
+    replace(this._sortComponent, prevSortComponent);
+    remove(prevSortComponent);
     replace(this._filterComponent, prevFilterComponent);
     remove(prevFilterComponent);
-    replace(this._siteMenuComponent, prevMenuComponent);
-    remove(prevMenuComponent);
   }
 
   _handleModelEvent() {
@@ -52,7 +51,7 @@ export default class Filter {
     this._filterModel.setFilter(UpdateType.MAJOR, filterType);
   }
 
-  _getFilters() {
+  _getSorts() {
     const movies = this._moviesModel.getMovies();
 
     return [
@@ -69,6 +68,31 @@ export default class Filter {
         type: SortType.RATING,
         name: 'RATING',
         count: sort[SortType.RATING](movies).length,
+      },
+    ];
+  }
+
+  _getFilter() {
+    const movies = this._moviesModel.getMovies();
+
+    return [
+      {
+        type: FilterType.ALL_MOVIES,
+        name: 'ALL_MOVIES',
+        count: filter[FilterType.ALL_MOVIES](movies).length,
+      },
+      {
+        type: FilterType.WATCHLIST,
+        name: 'WATCHLIST',
+        count: filter[FilterType.WATCHLIST](movies).length,
+      },      {
+        type: FilterType.HISTORY,
+        name: 'HISTORY',
+        count: filter[FilterType.HISTORY](movies).length,
+      },      {
+        type: FilterType.FAVORITES,
+        name: 'FAVORITES',
+        count: filter[FilterType.FAVORITES](movies).length,
       },
     ];
   }
