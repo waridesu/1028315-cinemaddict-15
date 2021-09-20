@@ -5,12 +5,10 @@ import {sort} from '../view/utils/sort';
 import SiteMenuView from '../view/site-menu';
 
 export default class Filter {
-  constructor(filterContainer, moviesModel, filterModel,siteMenuData, sortHandler) {
+  constructor(filterContainer, moviesModel, filterModel) {
     this._filterContainer = filterContainer;
     this._moviesModel = moviesModel;
     this._filterModel = filterModel;
-    this._menuData = siteMenuData;
-    this._sortTypeHandler = sortHandler;
 
     this._siteMenuComponent= null;
     this._filterComponent = null;
@@ -23,11 +21,12 @@ export default class Filter {
   }
 
   init() {
-    const filters = this._menuData;
+    const filter = this._getFilters();
     const prevFilterComponent = this._filterComponent;
-    this._siteMenuComponent = new SiteMenuView(this._menuData);
-    this._filterComponent = new FilterView(filters, this._filterModel.getFilter());
-    // don't know with all this filtering and it's still filtering watchlist, history, favorites and all
+    const prevMenuComponent = this._siteMenuComponent;
+    this._siteMenuComponent = new SiteMenuView(this._moviesModel.getMovies());
+    this._filterComponent = new FilterView(filter, this._filterModel.getFilter());
+
     this._filterComponent.setSortTypeChangeHandler(this._handleFilterTypeChange);
 
     if (prevFilterComponent === null) {
@@ -38,6 +37,8 @@ export default class Filter {
 
     replace(this._filterComponent, prevFilterComponent);
     remove(prevFilterComponent);
+    replace(this._siteMenuComponent, prevMenuComponent);
+    remove(prevMenuComponent);
   }
 
   _handleModelEvent() {
@@ -48,27 +49,26 @@ export default class Filter {
     if (this._filterModel.getFilter() === filterType) {
       return;
     }
-
     this._filterModel.setFilter(UpdateType.MAJOR, filterType);
   }
 
   _getFilters() {
-    const tasks = this._moviesModel.getMovies();
+    const movies = this._moviesModel.getMovies();
 
     return [
       {
         type: SortType.DEFAULT,
         name: 'DEFAULT',
-        count: sort[SortType.DEFAULT](tasks).length,
+        count: sort[SortType.DEFAULT](movies).length,
       },
       {
         type: SortType.DATE,
         name: 'DATE',
-        count: sort[SortType.DATE](tasks).length,
+        count: sort[SortType.DATE](movies).length,
       },      {
         type: SortType.RATING,
         name: 'RATING',
-        count: sort[SortType.RATING](tasks).length,
+        count: sort[SortType.RATING](movies).length,
       },
     ];
   }

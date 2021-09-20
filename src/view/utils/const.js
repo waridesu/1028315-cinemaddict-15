@@ -1,7 +1,7 @@
 export const SortType = {
-  DEFAULT: 'default',
-  DATE: 'date',
-  RATING: 'rating',
+  DEFAULT: 'DEFAULT',
+  DATE: 'DATE',
+  RATING: 'RATING',
 };
 export const UserAction = {
   UPDATE_MOVIE: 'UPDATE_MOVIE',
@@ -13,4 +13,12 @@ export const UpdateType = {
   PATCH: 'PATCH',
   MINOR: 'MINOR',
   MAJOR: 'MAJOR',
+};
+
+export const MenuItem = {
+  ALL_MOVIES: 'ALL_MOVIES',
+  WATCHLIST: 'WATCHLIST',
+  HISTORY: 'HISTORY',
+  FAVORITES: 'FAVORITES',
+  STATS: 'STATS',
 };

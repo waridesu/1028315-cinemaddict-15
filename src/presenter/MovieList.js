@@ -1,12 +1,11 @@
 import SiteFilmContainerView from '../view/site-film-container/site-film-container.js';
 import SiteMoreButtonView from '../view/site-more-button.js';
 import SiteFilmListView from '../view/site-film-container/film-list/film-list.js';
-import {remove, render, RenderPosition } from '../view/utils/render';
+import {remove, render, RenderPosition, replace} from '../view/utils/render';
 import FilmListTop from '../view/site-film-container/film-list-containers/film-section-top';
 import FilmListMost from '../view/site-film-container/film-list-containers/film-section-most';
 import FilmListSection from '../view/site-film-container/film-list-containers/film-section';
 import MoviePresenter from './Movie.js';
-import FilterPresenter from './Filter.js';
 import SitePopUpView from '../view/site-popout/site-popup';
 import {SortType, UpdateType, UserAction} from '../view/utils/const';
 import NoMovies from '../view/site-film-container/list-empty.js';
@@ -21,7 +20,6 @@ export default class MovieList {
     this._currentSortType = SortType.DEFAULT;
     this._moviePresenter = new Map();
     this._sitePopUp = null;
-    this._prevSitePopUp = null;
     this._siteFilmContainerComponent = new SiteFilmContainerView();
     this._filmListSection = new FilmListSection();
     this._filmListMost = new FilmListMost();
@@ -35,8 +33,6 @@ export default class MovieList {
     this._moreButtonComponent = null;
     this._siteSortComponent = null;
     this._noMovieComponent = null;
-
-    this._popUpPosition = 0;
 
     this._handleViewAction = this._handleViewAction.bind(this);
     this._handleModelEvent = this._handleModelEvent.bind(this);
@@ -169,24 +165,14 @@ export default class MovieList {
     this._renderList();
   }
 
-  _renderSort() {
-    const filterPresenter = new FilterPresenter(this._movieListContainer, this._moviesModel, this._filterModel, this._getMovies(), this._handleSortTypeChange);
-    filterPresenter.init();
-  }
-
   _renderPopUp(movie) {
-    if (this._sitePopUp) {
-      this._closePopUp();
-    }
     document.addEventListener('keyup', this._onEscKeyUp);
     document.body.classList.add('hide-overflow');
-    this._prevSitePopUp = this._sitePopUp;
+    const prevSitePopUp = this._sitePopUp;
 
     this._sitePopUp = new SitePopUpView(movie);
 
     render(this._movieListContainer, this._sitePopUp, RenderPosition.BEFOREEND);
-    // need to scroll but i can't put it anywhere
-    this._sitePopUp.getElement().scrollTo(0, this._sitePopUp._scrollPositon);
 
     this._sitePopUp.setAddToWatchListHandler(() => this._setAddToWatchList(movie));
     this._sitePopUp.setAlreadyWatchedHandler(() => this._setAlreadyWatched(movie));
@@ -197,10 +183,12 @@ export default class MovieList {
     this._sitePopUp.setFormSubmitHandler();
     this._sitePopUp.setDescriptionTextareaHandler();
 
-    if(this._prevSitePopUp === null) {
+    if (prevSitePopUp === null) {
       return render(this._movieListContainer, this._sitePopUp, RenderPosition.BEFOREEND);
     }
-    remove(this._prevSitePopUp);
+
+    replace(this._sitePopUp, prevSitePopUp);
+    remove(prevSitePopUp);
   }
 
   _renderMovie(movie) {
@@ -286,8 +274,6 @@ export default class MovieList {
     if (movieCount === 0) {
       return this._renderNoMovies();
     }
-
-    this._renderSort();
 
     this._renderMovies(movies.slice(0, Math.min(movieCount, this._renderMovieCount)));
 

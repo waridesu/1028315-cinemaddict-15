@@ -49,7 +49,7 @@ const createStatisticTemplate = () => (
   </section>`
 );
 
-export default class Sort extends AbstractView {
+export default class Statistic extends AbstractView {
   constructor() {
     super();
   }
