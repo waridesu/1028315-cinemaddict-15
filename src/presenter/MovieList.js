@@ -253,7 +253,7 @@ export default class MovieList {
       UserAction.DELETE_COMMENT,
       UpdateType.MINOR,
       Object.assign({}, movie, {
-        text: [...movie.comments.slice(0, movie.comments.findIndex((comment) => comment.id === id)),
+        comments: [...movie.comments.slice(0, movie.comments.findIndex((comment) => comment.id === id)),
           ...movie.comments.slice(movie.comments.findIndex((comment) => comment.id === id) + 1)]}));
   }
 

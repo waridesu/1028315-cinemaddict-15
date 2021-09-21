@@ -6,10 +6,9 @@ import he from 'he';
 import {nanoid} from 'nanoid';
 
 const createSitePopUpTemplate = (movie, state) => {
-  const {poster, filmName, rating, filmYear, filmLength, filmGenre, description, comments} = movie;
   let commentsNumber = 0;
-  if (comments.length) {
-    commentsNumber = comments.length;
+  if (movie.comments.length) {
+    commentsNumber = movie.comments.length;
   }
   return `<section class="film-details">
   <form class="film-details__inner" action="" method="get">
@@ -19,7 +18,7 @@ const createSitePopUpTemplate = (movie, state) => {
       </div>
       <div class="film-details__info-wrap">
         <div class="film-details__poster">
-          <img class="film-details__poster-img" src="${poster}" alt="">
+          <img class="film-details__poster-img" src="${movie.poster}" alt="">
 
           <p class="film-details__age">18+</p>
         </div>
@@ -27,12 +26,12 @@ const createSitePopUpTemplate = (movie, state) => {
         <div class="film-details__info">
           <div class="film-details__info-head">
             <div class="film-details__title-wrap">
-              <h3 class="film-details__title">${filmName}</h3>
+              <h3 class="film-details__title">${movie.filmName}</h3>
               <p class="film-details__title-original">Original: The Great Flamarion</p>
             </div>
 
             <div class="film-details__rating">
-              <p class="film-details__total-rating">${rating}</p>
+              <p class="film-details__total-rating">${movie.rating}</p>
             </div>
           </div>
 
@@ -51,11 +50,11 @@ const createSitePopUpTemplate = (movie, state) => {
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Release Date</td>
-              <td class="film-details__cell">${filmYear}</td>
+              <td class="film-details__cell">${movie.filmYear}</td>
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Runtime</td>
-              <td class="film-details__cell">${filmLength}</td>
+              <td class="film-details__cell">${movie.filmLength}</td>
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Country</td>
@@ -64,12 +63,12 @@ const createSitePopUpTemplate = (movie, state) => {
             <tr class="film-details__row">
               <td class="film-details__term">Genres</td>
               <td class="film-details__cell">
-                ${createSiteGeneresTemplate(filmGenre)}
+                ${createSiteGeneresTemplate(movie.filmGenre)}
             </tr>
           </table>
 
           <p class="film-details__film-description">
-            ${description}
+            ${movie.description}
             </p>
         </div>
       </div>
@@ -86,7 +85,7 @@ const createSitePopUpTemplate = (movie, state) => {
         <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${commentsNumber}</span></h3>
 
         <ul class="film-details__comments-list">
-        ${comments.map((comment)=> createSiteCommentTemplate(comment)).join('')}
+        ${movie.comments.map((comment)=> createSiteCommentTemplate(comment)).join('')}
         </ul>
 
         <div class="film-details__new-comment">
