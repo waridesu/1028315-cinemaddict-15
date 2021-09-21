@@ -216,7 +216,7 @@ export default class PopUp extends Smart {
 
   _clickDeleteHandler(evt) {
     this._scrollPositon = this.getElement().scrollTop;
-    if (evt.target === undefined) {
+    if (!evt.target) {
       return;
     }
     evt.preventDefault();

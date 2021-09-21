@@ -249,12 +249,13 @@ export default class MovieList {
   }
 
   _deleteComment(movie, id) {
+    const index = movie.comments.findIndex((comment) => comment.id === id);
     this._handleViewAction(
       UserAction.DELETE_COMMENT,
       UpdateType.MINOR,
       Object.assign({}, movie, {
-        comments: [...movie.comments.slice(0, movie.comments.findIndex((comment) => comment.id === id)),
-          ...movie.comments.slice(movie.comments.findIndex((comment) => comment.id === id) + 1)]}));
+        comments: [...movie.comments.slice(0, index),
+          ...movie.comments.slice(index + 1)]}));
   }
 
   _handleLoadMoreButtonClick() {
