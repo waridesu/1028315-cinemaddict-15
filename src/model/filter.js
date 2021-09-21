@@ -1,10 +1,16 @@
 import AbstractObserver from '../view/utils/abstract-observer.js';
-import {SortType} from '../view/utils/const.js';
+import {FilterType, SortType} from '../view/utils/const.js';
 
 export default class Filter extends AbstractObserver {
   constructor() {
     super();
-    this._activeFilter = SortType.DEFAULT;
+    this._activeSort = SortType.DEFAULT;
+    this._activeFilter = FilterType.ALL_MOVIES;
+  }
+
+  setSort(updateType, sort) {
+    this._activeSort = sort;
+    this._notify(updateType, sort);
   }
 
   setFilter(updateType, filter) {
@@ -12,7 +18,13 @@ export default class Filter extends AbstractObserver {
     this._notify(updateType, filter);
   }
 
+  getSort() {
+    return this._activeSort;
+  }
+
   getFilter() {
     return this._activeFilter;
   }
+
+
 }

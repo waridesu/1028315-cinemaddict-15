@@ -219,6 +219,12 @@ export default class PopUp extends Smart {
     }
   }
 
+  _clickDeleteHandler(evt) {
+    this._scrollPositon = this.getElement().scrollTop;
+    evt.preventDefault();
+    this._callback.deleteComent();
+  }
+
   setCloseButtonHandler(callback) {
     this._callback.click = callback;
     this.getElement().querySelector('.film-details__close-btn').addEventListener('click', this._clickHandler);
@@ -253,6 +259,11 @@ export default class PopUp extends Smart {
 
   setFormSubmitHandler(callback) {
     this._callback.formSubmit = callback;
+    this.getElement().querySelector('form').addEventListener('keyup', this._clickSendHandler);
+  }
+
+  setDeleteComentHandler(callback) {
+    this._callback.deleteComent = callback;
     this.getElement().querySelector('form').addEventListener('keyup', this._clickSendHandler);
   }
 }

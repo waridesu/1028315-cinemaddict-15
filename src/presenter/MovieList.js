@@ -106,9 +106,9 @@ export default class MovieList {
   }
 
   _getMovies() {
-    this._filterType = this._filterModel.getFilter();
+    this._sortType = this._filterModel.getSort();
     const movies = this._moviesModel.getMovies();
-    const filteredTasks = sort[this._filterType](movies);
+    const sortedTasks = sort[this._sortType](movies);
 
     switch (this._currentSortType) {
       case SortType.DATE:
@@ -117,7 +117,7 @@ export default class MovieList {
         return movies.sort((a, b) => a.rating < b.rating && 1 || -1);
     }
 
-    return filteredTasks;
+    return sortedTasks;
   }
 
   _setAddToWatchList(movie) {

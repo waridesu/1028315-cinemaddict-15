@@ -14,6 +14,7 @@ export default class Filter {
     this._sortComponent = null;
 
     this._handleModelEvent = this._handleModelEvent.bind(this);
+    this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
     this._handleFilterTypeChange = this._handleFilterTypeChange.bind(this);
 
     this._moviesModel.addObserver(this._handleModelEvent);
@@ -23,10 +24,11 @@ export default class Filter {
   init() {
     const prevSortComponent = this._sortComponent;
     const prevFilterComponent = this._filterComponent;
-    this._filterComponent = new FilterView(this._moviesModel.getMovies(), this._getFilter(), this._filterModel.getFilter());
-    this._sortComponent = new SortView(this._getSorts(), this._filterModel.getFilter());
+    this._filterComponent = new FilterView(this._moviesModel.getMovies(), this._filterModel.getFilter());
+    this._sortComponent = new SortView(this._getSorts(), this._filterModel.getSort());
 
-    this._sortComponent.setSortTypeChangeHandler(this._handleFilterTypeChange);
+    this._sortComponent.setSortTypeChangeHandler(this._handleSortTypeChange);
+    this._filterComponent.setFilterTypeChangeHandler(this._handleFilterTypeChange);
 
     if (prevSortComponent === null) {
       render(this._filterContainer, this._sortComponent, RenderPosition.AFTERBEGIN);
@@ -42,6 +44,13 @@ export default class Filter {
 
   _handleModelEvent() {
     this.init();
+  }
+
+  _handleSortTypeChange(sortType) {
+    if (this._filterModel.getSort() === sortType) {
+      return;
+    }
+    this._filterModel.setSort(UpdateType.MAJOR, sortType);
   }
 
   _handleFilterTypeChange(filterType) {
