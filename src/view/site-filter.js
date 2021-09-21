@@ -29,7 +29,7 @@ const createSiteMenuTemplate = (details, currentFilterType) => {
 };
 
 export default class Filter extends AbstractView {
-  constructor(details, currentFilterType) {
+  constructor( filter, currentFilterType, details) {
     super();
     this._details = details;
 

@@ -45,6 +45,7 @@ export default class MovieList {
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
     this._handleLoadMoreButtonClick = this._handleLoadMoreButtonClick.bind(this);
     this._addComment = this._addComment.bind(this);
+    this._deleteComment = this._deleteComment.bind(this);
 
     this._moviesModel.addObserver(this._handleModelEvent);
     this._filterModel.addObserver(this._handleModelEvent);
@@ -192,6 +193,7 @@ export default class MovieList {
     this._sitePopUp.setAddEmojiHandler();
     this._sitePopUp.setFormSubmitHandler(this._addComment);
     this._sitePopUp.setDescriptionTextareaHandler();
+    this._sitePopUp.setDeleteCommentHandler(this._deleteComment);
 
     if (prevSitePopUp === null) {
       return render(this._movieListContainer, this._sitePopUp, RenderPosition.BEFOREEND);
@@ -247,6 +249,14 @@ export default class MovieList {
       UpdateType.MINOR,
       Object.assign( {},movie, {
         text: movie.comments.push(comment)}));
+  }
+
+  _deleteComment(movie, comment) {
+    this._handleViewAction(
+      UserAction.DELETE_COMMENT,
+      UpdateType.MINOR,
+      Object.assign( {},movie, {
+        text: movie.comments.delete(comment)}));
   }
 
   _handleLoadMoreButtonClick() {

@@ -103,11 +103,11 @@ const generateDescription = () => {
 
 const generateComments = () => {
   const comments = [
-    {id: '', text: 'Not good, not bad', emoji: '', author: 'Don Joe', commentaryDate: dayjs('2020-01-25').format('LLL')},
-    {id: '', text: 'Film boring', emoji: './images/emoji/sleeping.png', author: 'Anthony Joe', commentaryDate: dayjs('2020-04-25').format('LLL')},
-    {id: '', text: 'Afoul film', emoji: './images/emoji/angry.png', author: 'Don Willis', commentaryDate: dayjs('2019-07-25').format('LLL')},
-    {id: '', text: 'Funny plot', emoji: './images/emoji/smile.png', author: 'Adam Kennedy', commentaryDate: dayjs('2019-09-25').format('LLL')},
-    {id: '', text: 'For no one ', emoji: './images/emoji/puke.png', author: 'Selina Goes', commentaryDate: dayjs('2019-11-25').format('LLL')},
+    {id: nanoid(), text: 'Not good, not bad', emoji: '', author: 'Don Joe', commentaryDate: dayjs('2020-01-25').format('LLL')},
+    {id: nanoid(), text: 'Film boring', emoji: './images/emoji/sleeping.png', author: 'Anthony Joe', commentaryDate: dayjs('2020-04-25').format('LLL')},
+    {id: nanoid(), text: 'Afoul film', emoji: './images/emoji/angry.png', author: 'Don Willis', commentaryDate: dayjs('2019-07-25').format('LLL')},
+    {id: nanoid(), text: 'Funny plot', emoji: './images/emoji/smile.png', author: 'Adam Kennedy', commentaryDate: dayjs('2019-09-25').format('LLL')},
+    {id: nanoid(), text: 'For no one ', emoji: './images/emoji/puke.png', author: 'Selina Goes', commentaryDate: dayjs('2019-11-25').format('LLL')},
   ];
 
   const randomIndex = getRandomInteger(0, comments.length - 1);

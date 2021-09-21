@@ -24,7 +24,7 @@ export default class Filter {
   init() {
     const prevSortComponent = this._sortComponent;
     const prevFilterComponent = this._filterComponent;
-    this._filterComponent = new FilterView(this._moviesModel.getMovies(), this._filterModel.getFilter());
+    this._filterComponent = new FilterView(this._getFilter(), this._filterModel.getFilter(), this._moviesModel.getMovies());
     this._sortComponent = new SortView(this._getSorts(), this._filterModel.getSort());
 
     this._sortComponent.setSortTypeChangeHandler(this._handleSortTypeChange);

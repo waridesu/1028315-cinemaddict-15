@@ -145,6 +145,7 @@ export default class PopUp extends Smart {
     this._clickAddEmojiHandler = this._clickAddEmojiHandler.bind(this);
     this._clickSendHandler = this._clickSendHandler.bind(this);
     this._descriptionTextAreaHandler = this._descriptionTextAreaHandler.bind(this);
+    this._clickDeleteHandler = this._clickDeleteHandler.bind(this);
   }
 
   getTemplate() {
@@ -159,6 +160,7 @@ export default class PopUp extends Smart {
     this.setAddEmojiHandler(this._callback.addEmojiChange);
     this.setDescriptionTextareaHandler(this._callback.descriptionTextarea);
     this.setFormSubmitHandler(this._callback.formSubmit);
+    this.setDeleteCommentHandler(this._callback.deleteComent);
     this.getElement().scrollTo(0, this._scrollPositon);
   }
 
@@ -221,6 +223,9 @@ export default class PopUp extends Smart {
 
   _clickDeleteHandler(evt) {
     this._scrollPositon = this.getElement().scrollTop;
+    if (evt.target === undefined) {
+      return;
+    }
     evt.preventDefault();
     this._callback.deleteComent();
   }
@@ -262,8 +267,8 @@ export default class PopUp extends Smart {
     this.getElement().querySelector('form').addEventListener('keyup', this._clickSendHandler);
   }
 
-  setDeleteComentHandler(callback) {
+  setDeleteCommentHandler(callback) {
     this._callback.deleteComent = callback;
-    this.getElement().querySelector('form').addEventListener('keyup', this._clickSendHandler);
+    this.getElement().querySelector('.film-details__comment-delete').addEventListener('click', this._clickDeleteHandler);
   }
 }
