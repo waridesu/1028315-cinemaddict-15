@@ -10,6 +10,7 @@ import SitePopUpView from '../view/site-popout/site-popup';
 import {FilterType, SortType, UpdateType, UserAction} from '../view/utils/const';
 import NoMovies from '../view/site-film-container/list-empty.js';
 import {filter, sort} from '../view/utils/sort';
+
 const FILM_COUNT_PER_STEP = 5;
 
 export default class MovieList {
@@ -86,7 +87,7 @@ export default class MovieList {
         this._moviePresenter.get(data.id).init(data);
         break;
       case UpdateType.MINOR:
-        if(this._sitePopUp) {
+        if (this._sitePopUp) {
           const movies = this._moviesModel.getMovies();
           const movie = movies.find((item) => item.id === this._sitePopUp.getFilmId());
           this._sitePopUp.setFilm(movie);
@@ -242,16 +243,18 @@ export default class MovieList {
     this._handleViewAction(
       UserAction.ADD_COMMENT,
       UpdateType.MINOR,
-      Object.assign( {},movie, {
-        text: movie.comments.push(comment)}));
+      Object.assign({}, movie, {
+        text: movie.comments.push(comment),
+      }));
   }
 
-  _deleteComment(movie, comment) {
+  _deleteComment(movie, id) {
     this._handleViewAction(
       UserAction.DELETE_COMMENT,
       UpdateType.MINOR,
-      Object.assign( {},movie, {
-        text: [...movie.comments.slice(0, movie.comments.findIndex(comment)), ...movie.comments.slice(movie.comments.findIndex(comment) + 1)]}));
+      Object.assign({}, movie, {
+        text: [...movie.comments.slice(0, movie.comments.findIndex((comment) => comment.id === id)),
+          ...movie.comments.slice(movie.comments.findIndex((comment) => comment.id === id) + 1)]}));
   }
 
   _handleLoadMoreButtonClick() {
@@ -261,7 +264,7 @@ export default class MovieList {
 
     this._renderMovies(movies);
     this._renderMovieCount = newRenderedMovieCount;
-    if(this._renderMovieCount>= movieCount) {
+    if (this._renderMovieCount >= movieCount) {
       remove(this._moreButtonComponent);
     }
   }
@@ -287,8 +290,8 @@ export default class MovieList {
     if (resetSortType) {
       this._currentSortType = SortType.DEFAULT;
     }
-    if(resetFilterType) {
-      this._filterType= FilterType.ALL_MOVIES;
+    if (resetFilterType) {
+      this._filterType = FilterType.ALL_MOVIES;
     }
   }
 

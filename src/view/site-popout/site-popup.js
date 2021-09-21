@@ -227,7 +227,7 @@ export default class PopUp extends Smart {
       return;
     }
     evt.preventDefault();
-    this._callback.deleteComent(this._card, this._data);
+    this._callback.deleteComent(this._card, evt.target.value);
   }
 
   setCloseButtonHandler(callback) {
