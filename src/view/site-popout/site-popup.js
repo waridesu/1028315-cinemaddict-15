@@ -5,12 +5,7 @@ import dayjs from 'dayjs';
 import he from 'he';
 import {nanoid} from 'nanoid';
 
-const createSitePopUpTemplate = (movie, state) => {
-  let commentsNumber = 0;
-  if (movie.comments.length) {
-    commentsNumber = movie.comments.length;
-  }
-  return `<section class="film-details">
+const createSitePopUpTemplate = (movie, state) => `<section class="film-details">
   <form class="film-details__inner" action="" method="get">
     <div class="film-details__top-container">
       <div class="film-details__close">
@@ -82,7 +77,7 @@ const createSitePopUpTemplate = (movie, state) => {
 
     <div class="film-details__bottom-container">
       <section class="film-details__comments-wrap">
-        <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${commentsNumber}</span></h3>
+        <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${movie.comments.length}</span></h3>
 
         <ul class="film-details__comments-list">
         ${movie.comments.map((comment)=> createSiteCommentTemplate(comment)).join('')}
@@ -123,7 +118,6 @@ const createSitePopUpTemplate = (movie, state) => {
     </div>
   </form>
 </section>`;
-};
 
 export default class PopUp extends Smart {
   constructor(card) {
