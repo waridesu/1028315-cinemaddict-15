@@ -252,7 +252,16 @@ export default class MovieList {
     this._handleViewAction(
       UserAction.DELETE_COMMENT,
       UpdateType.MINOR,
-      movie.comments.filter((comment)=>comment.id !== id));
+      Object.assign({}, movie, {
+        id: movie.id,
+        description: movie.description,
+        filmGenre: movie.filmGenre,
+        filmLength: movie.filmLength,
+        filmName: movie.filmName,
+        filmYear: movie.filmYear,
+        poster: movie.poster,
+        comments: movie.comments.filter((comment)=>comment.id !== id),
+      }));
   }
 
   _handleLoadMoreButtonClick() {
