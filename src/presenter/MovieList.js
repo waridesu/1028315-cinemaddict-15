@@ -7,9 +7,9 @@ import FilmListMost from '../view/site-film-container/film-list-containers/film-
 import FilmListSection from '../view/site-film-container/film-list-containers/film-section';
 import MoviePresenter from './Movie.js';
 import SitePopUpView from '../view/site-popout/site-popup';
-import {SortType, UpdateType, UserAction} from '../view/utils/const';
+import {FilterType, SortType, UpdateType, UserAction} from '../view/utils/const';
 import NoMovies from '../view/site-film-container/list-empty.js';
-import {sort} from '../view/utils/sort';
+import {filter, sort} from '../view/utils/sort';
 const FILM_COUNT_PER_STEP = 5;
 
 export default class MovieList {
@@ -27,11 +27,10 @@ export default class MovieList {
     this._filmListSectionContainer = new SiteFilmListView();
     this._filmListMostContainer = new SiteFilmListView();
     this._filmListTopContainer = new SiteFilmListView();
-    this._filterType = SortType.DEFAULT;
+    this._filterType = FilterType.ALL_MOVIES;
     this._filterModel = filterModel;
 
     this._moreButtonComponent = null;
-    this._siteSortComponent = null;
     this._noMovieComponent = null;
 
     this._handleViewAction = this._handleViewAction.bind(this);
@@ -100,7 +99,7 @@ export default class MovieList {
         if (this._sitePopUp) {
           this._closePopUp();
         }
-        this._clearList({resetRenderedMovieCount: true, resetSortType: true});
+        this._clearList({resetRenderedMovieCount: true, resetSortType: true, resetFilterType: true});
         this._renderList();
         break;
     }
@@ -108,17 +107,13 @@ export default class MovieList {
 
   _getMovies() {
     this._sortType = this._filterModel.getSort();
+    this._filterType = this._filterModel.getFilter();
     const movies = this._moviesModel.getMovies();
-    const sortedTasks = sort[this._sortType](movies);
+    const filteredMovies = filter[this._filterType](movies);
+    const sortedMovies = sort[this._sortType](filteredMovies);
 
-    switch (this._currentSortType) {
-      case SortType.DATE:
-        return movies.sort((a, b) => a.filmYear < b.filmYear && 1 || -1);
-      case SortType.RATING:
-        return movies.sort((a, b) => a.rating < b.rating && 1 || -1);
-    }
 
-    return sortedTasks;
+    return sortedMovies;
   }
 
   _setAddToWatchList(movie) {
@@ -271,13 +266,12 @@ export default class MovieList {
     }
   }
 
-  _clearList({resetRenderedMovieCount = false, resetSortType = false} = {}) {
+  _clearList({resetRenderedMovieCount = false, resetSortType = false, resetFilterType = false} = {}) {
     const movieCount = this._getMovies().length;
 
     this._moviePresenter.forEach((presenter) => presenter.destroy());
     this._moviePresenter.clear();
 
-    remove(this._siteSortComponent);
     remove(this._moreButtonComponent);
 
     if (this._noMovieComponent) {
@@ -292,6 +286,9 @@ export default class MovieList {
 
     if (resetSortType) {
       this._currentSortType = SortType.DEFAULT;
+    }
+    if(resetFilterType) {
+      this._filterType= FilterType.ALL_MOVIES;
     }
   }
 
