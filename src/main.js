@@ -5,7 +5,6 @@ import FilterModel from './model/filter.js';
 import Filter from './presenter/Filter.js';
 
 const dataArray = new Array(20).fill().map(generateCard);
-
 const moviesModel = new MoviesModel();
 moviesModel.setMovies(dataArray);
 

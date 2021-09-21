@@ -3,6 +3,7 @@ import {createSiteGeneresTemplate} from './site-geners';
 import Smart from '../smart';
 import dayjs from 'dayjs';
 import he from 'he';
+import {nanoid} from 'nanoid';
 
 const createSitePopUpTemplate = (movie, state) => {
   const {poster, filmName, rating, filmYear, filmLength, filmGenre, description, comments} = movie;
@@ -85,16 +86,16 @@ const createSitePopUpTemplate = (movie, state) => {
         <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${commentsNumber}</span></h3>
 
         <ul class="film-details__comments-list">
-        ${comments.map((comment)=>createSiteCommentTemplate(comment)).join('')}
+        ${comments.map((comment)=> createSiteCommentTemplate(comment)).join('')}
         </ul>
 
         <div class="film-details__new-comment">
           <div class="film-details__add-emoji-label">
-          ${state.emoji ? `<img src="./images/emoji/${state.emoji}.png" width="100%" height="100%" alt="emoji"/>` : ''}
+          ${state.emoji ? `<img src="${state.emoji}" width="100%" height="100%" alt="emoji"/>` : ''}
           </div>
 
           <label class="film-details__comment-label">
-            <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment">${he.encode(state.description)}</textarea>
+            <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment">${he.encode(state.text)}</textarea>
           </label>
 
           <div class="film-details__emoji-list">
@@ -130,8 +131,9 @@ export default class PopUp extends Smart {
     super();
     this._card = card;
     this._data = {
+      id: nanoid(),
       emoji: '',
-      description: '',
+      text: '',
       author: 'Don Joe',
       commentaryDate: dayjs().format('LLL'),
     };
@@ -158,14 +160,21 @@ export default class PopUp extends Smart {
     this.setDescriptionTextareaHandler(this._callback.descriptionTextarea);
     this.setFormSubmitHandler(this._callback.formSubmit);
     this.getElement().scrollTo(0, this._scrollPositon);
+  }
 
+  getFilmId() {
+    return this._card.id;
+  }
+
+  setFilm(film) {
+    this._card = film;
   }
 
   _descriptionTextAreaHandler(evt) {
     this._scrollPositon = this.getElement().scrollTop;
     evt.preventDefault();
     this.updateData({
-      description: evt.target.value,
+      text: evt.target.value,
     }, true);
   }
 
@@ -177,20 +186,20 @@ export default class PopUp extends Smart {
   _clickAddToWatchListHandler(evt) {
     this._scrollPositon = this.getElement().scrollTop;
     evt.preventDefault();
-    this._callback.addToWatchList();
+    this._callback.addToWatchList(this._card);
 
   }
 
   _clickAddAlreadyWatchedHandler(evt) {
     this._scrollPositon = this.getElement().scrollTop;
     evt.preventDefault();
-    this._callback.addToAlreadyWatched();
+    this._callback.addToAlreadyWatched(this._card);
   }
 
   _clickAddFavoritesHandler(evt) {
     this._scrollPositon = this.getElement().scrollTop;
     evt.preventDefault();
-    this._callback.addToFavorite();
+    this._callback.addToFavorite(this._card);
   }
 
   _clickAddEmojiHandler(evt) {
@@ -199,13 +208,14 @@ export default class PopUp extends Smart {
       return;
     }
     evt.preventDefault();
-    this.updateData({emoji:evt.target.value});
+    this.updateData({emoji: `./images/emoji/${evt.target.value}.png`});
   }
 
   _clickSendHandler(evt) {
     this._scrollPositon = this.getElement().scrollTop;
     if(evt.ctrlKey && (evt.keyCode === 13 || evt.keyCode === 10)) {
-      this.updateData({description: ''});
+      this._callback.formSubmit(this._card, this._data);
+      this.updateData({emoji: '', text: ''});
     }
   }
 
@@ -243,6 +253,6 @@ export default class PopUp extends Smart {
 
   setFormSubmitHandler(callback) {
     this._callback.formSubmit = callback;
-    this.getElement().querySelector('form').addEventListener('submit', this._clickSendHandler);
+    this.getElement().querySelector('form').addEventListener('keyup', this._clickSendHandler);
   }
 }

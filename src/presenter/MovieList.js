@@ -44,6 +44,7 @@ export default class MovieList {
     this._setAddToFavorite = this._setAddToFavorite.bind(this);
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
     this._handleLoadMoreButtonClick = this._handleLoadMoreButtonClick.bind(this);
+    this._addComment = this._addComment.bind(this);
 
     this._moviesModel.addObserver(this._handleModelEvent);
     this._filterModel.addObserver(this._handleModelEvent);
@@ -85,10 +86,19 @@ export default class MovieList {
         this._moviePresenter.get(data.id).init(data);
         break;
       case UpdateType.MINOR:
+        if(this._sitePopUp) {
+          const movies = this._moviesModel.getMovies();
+          const movie = movies.find((item) => item.id === this._sitePopUp.getFilmId());
+          this._sitePopUp.setFilm(movie);
+          this._sitePopUp.updateElement();
+        }
         this._clearList();
         this._renderList();
         break;
       case UpdateType.MAJOR:
+        if (this._sitePopUp) {
+          this._closePopUp();
+        }
         this._clearList({resetRenderedMovieCount: true, resetSortType: true});
         this._renderList();
         break;
@@ -174,13 +184,13 @@ export default class MovieList {
 
     render(this._movieListContainer, this._sitePopUp, RenderPosition.BEFOREEND);
 
-    this._sitePopUp.setAddToWatchListHandler(() => this._setAddToWatchList(movie));
-    this._sitePopUp.setAlreadyWatchedHandler(() => this._setAlreadyWatched(movie));
-    this._sitePopUp.setAddToFavoritesHandler(() => this._setAddToFavorite(movie));
+    this._sitePopUp.setAddToWatchListHandler(this._setAddToWatchList);
+    this._sitePopUp.setAlreadyWatchedHandler(this._setAlreadyWatched);
+    this._sitePopUp.setAddToFavoritesHandler(this._setAddToFavorite);
 
     this._sitePopUp.setCloseButtonHandler(this._closePopUp);
     this._sitePopUp.setAddEmojiHandler();
-    this._sitePopUp.setFormSubmitHandler();
+    this._sitePopUp.setFormSubmitHandler(this._addComment);
     this._sitePopUp.setDescriptionTextareaHandler();
 
     if (prevSitePopUp === null) {
@@ -229,6 +239,14 @@ export default class MovieList {
       evt.preventDefault();
       this._closePopUp();
     }
+  }
+
+  _addComment(movie, comment) {
+    this._handleViewAction(
+      UserAction.ADD_COMMENT,
+      UpdateType.MINOR,
+      Object.assign( {},movie, {
+        text: movie.comments.push(comment)}));
   }
 
   _handleLoadMoreButtonClick() {
