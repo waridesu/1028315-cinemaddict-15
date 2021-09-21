@@ -249,6 +249,7 @@ export default class MovieList {
   }
 
   _deleteComment(movie, id) {
+    const index = movie.comments.findIndex((task) => task.id === id);
     this._handleViewAction(
       UserAction.DELETE_COMMENT,
       UpdateType.MINOR,
@@ -261,13 +262,17 @@ export default class MovieList {
         filmLength: movie.filmLength,
         filmGenre: movie.filmGenre,
         description: movie.description,
-        comments: movie.comments.filter((comment)=>comment.id !== id),
+        comments: movie.comments = [
+          ...movie.comments.slice(0, index),
+          ...movie.comments.slice(index + 1),
+        ],
         'user_details': {
           'watchlist': movie.user_details.watchlist,
           'alreadyWatched': movie.user_details.alreadyWatched,
           'favorite': movie.user_details.favorite,
         },
       }));
+    return movie;
   }
 
   _handleLoadMoreButtonClick() {
