@@ -254,13 +254,19 @@ export default class MovieList {
       UpdateType.MINOR,
       Object.assign({}, movie, {
         id: movie.id,
-        description: movie.description,
-        filmGenre: movie.filmGenre,
-        filmLength: movie.filmLength,
-        filmName: movie.filmName,
-        filmYear: movie.filmYear,
         poster: movie.poster,
+        filmName: movie.filmName,
+        rating: movie.rating,
+        filmYear: movie.filmYear,
+        filmLength: movie.filmLength,
+        filmGenre: movie.filmGenre,
+        description: movie.description,
         comments: movie.comments.filter((comment)=>comment.id !== id),
+        'user_details': {
+          'watchlist': movie.user_details.watchlist,
+          'alreadyWatched': movie.user_details.alreadyWatched,
+          'favorite': movie.user_details.favorite,
+        },
       }));
   }
 
