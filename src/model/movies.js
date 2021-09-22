@@ -42,7 +42,9 @@ export default class Movies extends AbstractObserver {
 
   // same here
   deleteCommentary(updateType) {
-
+    this._movies = [
+      ...this._movies,
+    ];
     this._notify(updateType);
   }
 }
