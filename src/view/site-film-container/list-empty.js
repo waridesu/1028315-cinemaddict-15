@@ -1,14 +1,24 @@
 import AbstractView from '../abstract.js';
+import {SortType} from '../utils/const';
 
-const createSiteListEmptyTemplate = (props) => `<h2 class="films-list__title">${props}</h2>`;
+const NoMovieTextType = {
+  [SortType.DATE]: 'No film by date',
+  [SortType.RATING]: 'No film be rating',
+};
 
-export default class ListEmpty extends AbstractView {
-  constructor(props) {
+const createSiteListEmptyTemplate = (filterType) => {
+  const noMovieTextValue = NoMovieTextType[filterType];
+
+  return `<h2 class="films-list__title">${noMovieTextValue}</h2>`;
+};
+
+export default class NoMovies extends AbstractView {
+  constructor(data) {
     super();
-    this._props = props;
+    this._data = data;
   }
 
   getTemplate() {
-    return createSiteListEmptyTemplate(this._props);
+    return createSiteListEmptyTemplate(this._data);
   }
 }

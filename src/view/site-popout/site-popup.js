@@ -2,14 +2,10 @@ import {createSiteCommentTemplate} from './site-comment';
 import {createSiteGeneresTemplate} from './site-geners';
 import Smart from '../smart';
 import dayjs from 'dayjs';
+import he from 'he';
+import {nanoid} from 'nanoid';
 
-const createSitePopUpTemplate = (movie, state) => {
-  const {poster, filmName, rating, filmYear, filmLength, filmGenre, description, comments} = movie;
-  let commentsNumber = 0;
-  if (comments.length) {
-    commentsNumber = comments.length;
-  }
-  return `<section class="film-details">
+const createSitePopUpTemplate = (movie, state) => `<section class="film-details">
   <form class="film-details__inner" action="" method="get">
     <div class="film-details__top-container">
       <div class="film-details__close">
@@ -17,7 +13,7 @@ const createSitePopUpTemplate = (movie, state) => {
       </div>
       <div class="film-details__info-wrap">
         <div class="film-details__poster">
-          <img class="film-details__poster-img" src="${poster}" alt="">
+          <img class="film-details__poster-img" src="${movie.poster}" alt="">
 
           <p class="film-details__age">18+</p>
         </div>
@@ -25,12 +21,12 @@ const createSitePopUpTemplate = (movie, state) => {
         <div class="film-details__info">
           <div class="film-details__info-head">
             <div class="film-details__title-wrap">
-              <h3 class="film-details__title">${filmName}</h3>
+              <h3 class="film-details__title">${movie.filmName}</h3>
               <p class="film-details__title-original">Original: The Great Flamarion</p>
             </div>
 
             <div class="film-details__rating">
-              <p class="film-details__total-rating">${rating}</p>
+              <p class="film-details__total-rating">${movie.rating}</p>
             </div>
           </div>
 
@@ -49,11 +45,11 @@ const createSitePopUpTemplate = (movie, state) => {
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Release Date</td>
-              <td class="film-details__cell">${filmYear}</td>
+              <td class="film-details__cell">${movie.filmYear}</td>
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Runtime</td>
-              <td class="film-details__cell">${filmLength}</td>
+              <td class="film-details__cell">${movie.filmLength}</td>
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Country</td>
@@ -62,12 +58,12 @@ const createSitePopUpTemplate = (movie, state) => {
             <tr class="film-details__row">
               <td class="film-details__term">Genres</td>
               <td class="film-details__cell">
-                ${createSiteGeneresTemplate(filmGenre)}
+                ${createSiteGeneresTemplate(movie.filmGenre)}
             </tr>
           </table>
 
           <p class="film-details__film-description">
-            ${description}
+            ${movie.description}
             </p>
         </div>
       </div>
@@ -81,19 +77,19 @@ const createSitePopUpTemplate = (movie, state) => {
 
     <div class="film-details__bottom-container">
       <section class="film-details__comments-wrap">
-        <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${commentsNumber}</span></h3>
+        <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${movie.comments.length}</span></h3>
 
         <ul class="film-details__comments-list">
-        ${comments.map((comment)=>createSiteCommentTemplate(comment)).join('')}
+        ${movie.comments.map((comment)=> createSiteCommentTemplate(comment)).join('')}
         </ul>
 
         <div class="film-details__new-comment">
           <div class="film-details__add-emoji-label">
-          ${state.emoji ? `<img src="./images/emoji/${state.emoji}.png" width="100%" height="100%" alt="emoji"/>` : ''}
+          ${state.emoji ? `<img src="${state.emoji}" width="100%" height="100%" alt="emoji"/>` : ''}
           </div>
 
           <label class="film-details__comment-label">
-            <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment">${state.description}</textarea>
+            <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment">${he.encode(state.text)}</textarea>
           </label>
 
           <div class="film-details__emoji-list">
@@ -122,15 +118,15 @@ const createSitePopUpTemplate = (movie, state) => {
     </div>
   </form>
 </section>`;
-};
 
 export default class PopUp extends Smart {
   constructor(card) {
     super();
     this._card = card;
     this._data = {
+      id: nanoid(),
       emoji: '',
-      description: '',
+      text: '',
       author: 'Don Joe',
       commentaryDate: dayjs().format('LLL'),
     };
@@ -142,6 +138,7 @@ export default class PopUp extends Smart {
     this._clickAddEmojiHandler = this._clickAddEmojiHandler.bind(this);
     this._clickSendHandler = this._clickSendHandler.bind(this);
     this._descriptionTextAreaHandler = this._descriptionTextAreaHandler.bind(this);
+    this._clickDeleteHandler = this._clickDeleteHandler.bind(this);
   }
 
   getTemplate() {
@@ -149,7 +146,6 @@ export default class PopUp extends Smart {
   }
 
   restoreHandlers() {
-    this.getElement().scrollTo(0, this._scrollPositon);
     this.setCloseButtonHandler(this._callback.click);
     this.setAddToWatchListHandler(this._callback.addToWatchList);
     this.setAlreadyWatchedHandler(this._callback.addToAlreadyWatched);
@@ -157,13 +153,23 @@ export default class PopUp extends Smart {
     this.setAddEmojiHandler(this._callback.addEmojiChange);
     this.setDescriptionTextareaHandler(this._callback.descriptionTextarea);
     this.setFormSubmitHandler(this._callback.formSubmit);
+    this.setDeleteCommentHandler(this._callback.deleteComent);
+    this.getElement().scrollTo(0, this._scrollPositon);
+  }
+
+  getFilmId() {
+    return this._card.id;
+  }
+
+  setFilm(film) {
+    this._card = film;
   }
 
   _descriptionTextAreaHandler(evt) {
     this._scrollPositon = this.getElement().scrollTop;
     evt.preventDefault();
     this.updateData({
-      description: evt.target.value,
+      text: evt.target.value,
     }, true);
   }
 
@@ -175,20 +181,20 @@ export default class PopUp extends Smart {
   _clickAddToWatchListHandler(evt) {
     this._scrollPositon = this.getElement().scrollTop;
     evt.preventDefault();
-    this._callback.addToWatchList();
+    this._callback.addToWatchList(this._card);
 
   }
 
   _clickAddAlreadyWatchedHandler(evt) {
     this._scrollPositon = this.getElement().scrollTop;
     evt.preventDefault();
-    this._callback.addToAlreadyWatched();
+    this._callback.addToAlreadyWatched(this._card);
   }
 
   _clickAddFavoritesHandler(evt) {
     this._scrollPositon = this.getElement().scrollTop;
     evt.preventDefault();
-    this._callback.addToFavorite();
+    this._callback.addToFavorite(this._card);
   }
 
   _clickAddEmojiHandler(evt) {
@@ -197,14 +203,25 @@ export default class PopUp extends Smart {
       return;
     }
     evt.preventDefault();
-    this.updateData({emoji:evt.target.value});
+    this.updateData({emoji: `./images/emoji/${evt.target.value}.png`});
   }
 
   _clickSendHandler(evt) {
     this._scrollPositon = this.getElement().scrollTop;
     if(evt.ctrlKey && (evt.keyCode === 13 || evt.keyCode === 10)) {
-      this.updateData({description: ''});
+      this._callback.formSubmit(this._card, this._data);
+      this.updateData({emoji: '', text: ''});
     }
+  }
+
+  _clickDeleteHandler(evt) {
+    this._scrollPositon = this.getElement().scrollTop;
+    if (evt.target.value === undefined) {
+      return;
+    }
+    evt.preventDefault();
+    this._callback.deleteComent(this._card, evt.target.value);
+    this.updateData(this._card);
   }
 
   setCloseButtonHandler(callback) {
@@ -241,6 +258,12 @@ export default class PopUp extends Smart {
 
   setFormSubmitHandler(callback) {
     this._callback.formSubmit = callback;
-    this.getElement().querySelector('form').addEventListener('submit', this._clickSendHandler);
+    this.getElement().querySelector('form').addEventListener('keyup', this._clickSendHandler);
+  }
+
+  setDeleteCommentHandler(callback) {
+    this._callback.deleteComent = callback;
+    this.getElement().querySelectorAll('.film-details__comment-delete')
+      .forEach((button) => button.addEventListener('click', this._clickDeleteHandler));
   }
 }
