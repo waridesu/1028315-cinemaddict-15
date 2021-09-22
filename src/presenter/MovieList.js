@@ -73,10 +73,10 @@ export default class MovieList {
         this._moviesModel.updateMovie(updateType, update);
         break;
       case UserAction.ADD_COMMENT:
-        this._moviesModel.addCommentary(updateType, update);
+        this._moviesModel.addCommentary(updateType);
         break;
       case UserAction.DELETE_COMMENT:
-        this._moviesModel.deleteCommentary(updateType, update);
+        this._moviesModel.deleteCommentary(updateType);
         break;
     }
   }

@@ -32,19 +32,14 @@ export default class Movies extends AbstractObserver {
 
   // I know that wrong, but dont know how right
   addCommentary(updateType, update) {
-    this._movies = [
-      update,
-      ...this._movies,
-    ];
+    this._movies = [...this._movies];
 
     this._notify(updateType, update);
   }
 
   // same here
   deleteCommentary(updateType) {
-    this._movies = [
-      ...this._movies,
-    ];
+    this._movies = [...this._movies];
     this._notify(updateType);
   }
 }
