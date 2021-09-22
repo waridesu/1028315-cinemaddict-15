@@ -17,9 +17,6 @@ export default class Filter {
     this._handleModelEvent = this._handleModelEvent.bind(this);
     this._handleSortTypeChange = this._handleSortTypeChange.bind(this);
     this._handleFilterTypeChange = this._handleFilterTypeChange.bind(this);
-
-    this._moviesModel.addObserver(this._handleModelEvent);
-    this._filterModel.addObserver(this._handleModelEvent);
   }
 
   init() {
@@ -30,6 +27,10 @@ export default class Filter {
 
     this._sortComponent.setSortTypeChangeHandler(this._handleSortTypeChange);
     this._filterComponent.setFilterTypeChangeHandler(this._handleFilterTypeChange);
+
+
+    this._moviesModel.addObserver(this._handleModelEvent);
+    this._filterModel.addObserver(this._handleModelEvent);
 
     if (prevSortComponent === null) {
       render(this._filterContainer, this._sortComponent, RenderPosition.AFTERBEGIN);

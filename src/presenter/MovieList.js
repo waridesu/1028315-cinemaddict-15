@@ -2,8 +2,6 @@ import SiteFilmContainerView from '../view/site-film-container/site-film-contain
 import SiteMoreButtonView from '../view/site-more-button.js';
 import SiteFilmListView from '../view/site-film-container/film-list/film-list.js';
 import {remove, render, RenderPosition, replace} from '../view/utils/render';
-import FilmListTop from '../view/site-film-container/film-list-containers/film-section-top';
-import FilmListMost from '../view/site-film-container/film-list-containers/film-section-most';
 import FilmListSection from '../view/site-film-container/film-list-containers/film-section';
 import MoviePresenter from './Movie.js';
 import SitePopUpView from '../view/site-popout/site-popup';
@@ -24,11 +22,7 @@ export default class MovieList {
     this._sitePopUp = null;
     this._siteFilmContainerComponent = new SiteFilmContainerView();
     this._filmListSection = new FilmListSection();
-    this._filmListMost = new FilmListMost();
-    this._filmListTop = new FilmListTop();
     this._filmListSectionContainer = new SiteFilmListView();
-    this._filmListMostContainer = new SiteFilmListView();
-    this._filmListTopContainer = new SiteFilmListView();
     this._filterType = FilterType.ALL_MOVIES;
     this._filterModel = filterModel;
 
@@ -47,35 +41,26 @@ export default class MovieList {
     this._handleLoadMoreButtonClick = this._handleLoadMoreButtonClick.bind(this);
     this._addComment = this._addComment.bind(this);
     this._deleteComment = this._deleteComment.bind(this);
-
-    this._moviesModel.addObserver(this._handleModelEvent);
-    this._filterModel.addObserver(this._handleModelEvent);
   }
 
   init() {
-
     render(this._movieListContainer, this._siteFilmContainerComponent, RenderPosition.BEFOREEND);
 
     render(this._siteFilmContainerComponent, this._filmListSection, RenderPosition.BEFOREEND);
     render(this._filmListSection, this._filmListSectionContainer, RenderPosition.BEFOREEND);
 
-    render(this._siteFilmContainerComponent, this._filmListMost, RenderPosition.BEFOREEND);
-    render(this._filmListMost, this._filmListMostContainer, RenderPosition.BEFOREEND);
-
-    render(this._siteFilmContainerComponent, this._filmListTop, RenderPosition.BEFOREEND);
-    render(this._filmListTop, this._filmListTopContainer, RenderPosition.BEFOREEND);
+    this._moviesModel.addObserver(this._handleModelEvent);
+    this._filterModel.addObserver(this._handleModelEvent);
 
     this._renderList();
   }
 
   destroy() {
+    this._clearList({resetRenderedMovieCount: true, resetSortType: true, resetFilterType: true});
+
     remove(this._siteFilmContainerComponent);
     remove(this._filmListSection);
-    remove(this._filmListMost);
-    remove(this._filmListTop);
     remove(this._filmListSectionContainer);
-    remove(this._filmListMostContainer);
-    remove(this._filmListTopContainer);
 
 
     this._moviesModel.removeObserver(this._handleModelEvent);
@@ -286,7 +271,6 @@ export default class MovieList {
   }
 
   _clearList({resetRenderedMovieCount = false, resetSortType = false, resetFilterType = false} = {}) {
-    const movieCount = this._getMovies().length;
 
     this._moviePresenter.forEach((presenter) => presenter.destroy());
     this._moviePresenter.clear();
@@ -300,6 +284,8 @@ export default class MovieList {
     if (resetRenderedMovieCount) {
       this._renderMovieCount = FILM_COUNT_PER_STEP;
     } else {
+      const movieCount = this._getMovies().length;
+
       this._renderMovieCount = Math.min(movieCount, this._renderMovieCount);
     }
 

@@ -19,6 +19,7 @@ const menuPresenter = new Filter(siteMainElement, moviesModel, filterModel);
 const movieListPresenter = new MoviePresenter(siteMainElement, moviesModel, filterModel);
 const backToList = (isEmpty) => {
   if(isEmpty) {
+    movieListPresenter.destroy();
     movieListPresenter.init();
     menuPresenter.init();
     statisticPresenter.destroy();
@@ -28,16 +29,16 @@ const backToList = (isEmpty) => {
 export const filter = {
 
   [FilterType.ALL_MOVIES]: (movies) => {
-    backToList(!movieListPresenter._siteFilmContainerComponent._element);
+    backToList(!document.querySelector('.films'));
     return movies;},
   [FilterType.WATCHLIST]: (movies) => {
-    backToList(!movieListPresenter._siteFilmContainerComponent._element);
+    backToList(!document.querySelector('.films'));
     return movies.filter((movie)=> movie.user_details.watchlist);},
   [FilterType.HISTORY]: (movies) => {
-    backToList(!movieListPresenter._siteFilmContainerComponent._element);
+    backToList(!document.querySelector('.films'));
     return movies.filter((movie)=> movie.user_details.alreadyWatched);},
   [FilterType.FAVORITES]: (movies) => {
-    backToList(!movieListPresenter._siteFilmContainerComponent._element);
+    backToList(!document.querySelector('.films'));
     return movies.filter((movie)=> movie.user_details.favorite);},
   [FilterType.STATS]: ((movies) => {
     movieListPresenter.destroy();
@@ -46,9 +47,9 @@ export const filter = {
     return movies;
   }),
 };
+movieListPresenter.init();
 
 menuPresenter.init();
-movieListPresenter.init();
 
 
 /*document.querySelector('.main-navigation__additional')
