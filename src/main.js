@@ -39,11 +39,10 @@ export const filter = {
   [FilterType.FAVORITES]: (movies) => {
     backToList();
     return movies.filter((movie)=> movie.user_details.favorite);},
-  [FilterType.STATS]: ((movies) => {
+  [FilterType.STATS]: (()=> {
     movieListPresenter.destroy();
     menuPresenter.destroy();
     statisticPresenter.init();
-    return movies;
   }),
 };
 movieListPresenter.init();

@@ -111,8 +111,8 @@ export default class Filter {
         count: filter[FilterType.FAVORITES](movies).length,
       }, {
         type: FilterType.STATS,
-        name: 'FAVORITES',
-        count: filter[FilterType.FAVORITES](movies).length,
+        name: 'STATS',
+        count: filter[FilterType.STATS],
       },
     ];
   }
