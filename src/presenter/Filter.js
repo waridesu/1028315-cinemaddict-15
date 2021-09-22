@@ -1,7 +1,8 @@
 import SortView from '../view/site-sort';
 import {render, RenderPosition, replace, remove} from '../view/utils/render';
 import {FilterType, SortType, UpdateType} from '../view/utils/const.js';
-import {filter, sort} from '../view/utils/sort';
+import {sort} from '../view/utils/sort';
+import {filter} from '../main';
 import FilterView from '../view/site-filter';
 
 export default class Filter {
@@ -36,10 +37,15 @@ export default class Filter {
       return;
     }
 
+
     replace(this._sortComponent, prevSortComponent);
     remove(prevSortComponent);
     replace(this._filterComponent, prevFilterComponent);
     remove(prevFilterComponent);
+  }
+
+  destroy(){
+    remove(this._sortComponent);
   }
 
   _handleModelEvent() {
@@ -100,6 +106,10 @@ export default class Filter {
         count: filter[FilterType.HISTORY](movies).length,
       },      {
         type: FilterType.FAVORITES,
+        name: 'FAVORITES',
+        count: filter[FilterType.FAVORITES](movies).length,
+      }, {
+        type: FilterType.STATS,
         name: 'FAVORITES',
         count: filter[FilterType.FAVORITES](movies).length,
       },

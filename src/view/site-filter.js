@@ -24,7 +24,7 @@ const createSiteMenuTemplate = (details, currentFilterType) => {
       <a href="#history" class="main-navigation__item ${ currentFilterType === FilterType.HISTORY ? 'main-navigation__item--active' : ''}" data-filter-type="${FilterType.HISTORY}">History <span class="main-navigation__item-count">${history}</span></a>
       <a href="#favorites" class="main-navigation__item ${ currentFilterType === FilterType.FAVORITES ? 'main-navigation__item--active' : ''}" data-filter-type="${FilterType.FAVORITES}">Favorites <span class="main-navigation__item-count">${favorite}</span></a>
     </div>
-    <a href="#stats" class="main-navigation__additional">Stats</a>
+    <a href="#stats" class="main-navigation__additional ${ currentFilterType === FilterType.FAVORITES ? 'main-navigation__item--active' : ''}" data-filter-type="${FilterType.STATS}">Stats</a>
   </nav>`;
 };
 

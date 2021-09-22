@@ -9,7 +9,8 @@ import MoviePresenter from './Movie.js';
 import SitePopUpView from '../view/site-popout/site-popup';
 import {FilterType, SortType, UpdateType, UserAction} from '../view/utils/const';
 import NoMovies from '../view/site-film-container/list-empty.js';
-import {filter, sort} from '../view/utils/sort';
+import {sort} from '../view/utils/sort';
+import {filter} from '../main';
 
 const FILM_COUNT_PER_STEP = 5;
 
@@ -65,6 +66,20 @@ export default class MovieList {
     render(this._filmListTop, this._filmListTopContainer, RenderPosition.BEFOREEND);
 
     this._renderList();
+  }
+
+  destroy() {
+    remove(this._siteFilmContainerComponent);
+    remove(this._filmListSection);
+    remove(this._filmListMost);
+    remove(this._filmListTop);
+    remove(this._filmListSectionContainer);
+    remove(this._filmListMostContainer);
+    remove(this._filmListTopContainer);
+
+
+    this._moviesModel.removeObserver(this._handleModelEvent);
+    this._filterModel.removeObserver(this._handleModelEvent);
   }
 
   _handleViewAction(actionType, updateType, update) {

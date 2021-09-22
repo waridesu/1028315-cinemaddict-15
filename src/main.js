@@ -3,48 +3,66 @@ import MoviePresenter from './presenter/MovieList.js';
 import MoviesModel from './model/movies.js';
 import FilterModel from './model/filter.js';
 import Filter from './presenter/Filter.js';
+import StatisticPresenter from './presenter/Statistic';
+import {FilterType} from './view/utils/const';
+
 
 const dataArray = new Array(20).fill().map(generateCard);
 const moviesModel = new MoviesModel();
 moviesModel.setMovies(dataArray);
-
 const filterModel = new FilterModel();
 
 const siteMainElement = document.querySelector('.main');
-
-const movieListPresenter = new MoviePresenter(siteMainElement, moviesModel, filterModel);
+const statisticPresenter = new StatisticPresenter(siteMainElement, moviesModel, filterModel);
 const menuPresenter = new Filter(siteMainElement, moviesModel, filterModel);
 
-/*const handleSiteMenuClick = (menuItem) => {
-  switch (menuItem) {
-    case MenuItem.ALL_MOVIES:
-      remove(statisticsComponent);
-      movieListPresenter.destroy();
-      filterModel.setFilter(UpdateType.MAJOR, FilterType.ALL);
-      movieListPresenter.init();
-      siteMenuComponent.getElement().querySelector(`[value=${MenuItem.TASKS}]`).disabled = true;
-      break;
-    case MenuItem.WATCHLIST:
-      boardPresenter.init();
-      remove(statisticsComponent);
-      break;
-    case MenuItem.HISTORY:
-      boardPresenter.destroy();
-      statisticsComponent = new StatisticsView(tasksModel.getTasks());
-      render(siteMainElement, statisticsComponent, RenderPosition.BEFOREEND);
-      break;
-    case MenuItem.FAVORITES:
-      boardPresenter.destroy();
-      statisticsComponent = new StatisticsView(tasksModel.getTasks());
-      render(siteMainElement, statisticsComponent, RenderPosition.BEFOREEND);
-      break;
-    case MenuItem.STATS:
-      movieListPresenter.destroy();
-      let statisticsComponent;
-      statisticsComponent = new StatisticsView(tasksModel.getTasks());
-      render(siteMainElement, statisticsComponent, RenderPosition.BEFOREEND);
-      break;
+const movieListPresenter = new MoviePresenter(siteMainElement, moviesModel, filterModel);
+const backToList = (isEmpty) => {
+  if(isEmpty) {
+    movieListPresenter.init();
+    menuPresenter.init();
+    statisticPresenter.destroy();
   }
-};*/
+};
+
+export const filter = {
+
+  [FilterType.ALL_MOVIES]: (movies) => {
+    backToList(!movieListPresenter._siteFilmContainerComponent._element);
+    return movies;},
+  [FilterType.WATCHLIST]: (movies) => {
+    backToList(!movieListPresenter._siteFilmContainerComponent._element);
+    return movies.filter((movie)=> movie.user_details.watchlist);},
+  [FilterType.HISTORY]: (movies) => {
+    backToList(!movieListPresenter._siteFilmContainerComponent._element);
+    return movies.filter((movie)=> movie.user_details.alreadyWatched);},
+  [FilterType.FAVORITES]: (movies) => {
+    backToList(!movieListPresenter._siteFilmContainerComponent._element);
+    return movies.filter((movie)=> movie.user_details.favorite);},
+  [FilterType.STATS]: ((movies) => {
+    movieListPresenter.destroy();
+    menuPresenter.destroy();
+    statisticPresenter.init();
+    return movies;
+  }),
+};
+
 menuPresenter.init();
 movieListPresenter.init();
+
+
+/*document.querySelector('.main-navigation__additional')
+  .addEventListener('click', ()=> {
+    movieListPresenter.destroy();
+    menuPresenter.destroy();
+    statisticPresenter.init();
+  });*/
+
+/*document.querySelector('.main-navigation__items')
+  .addEventListener('click', (evt) => {
+    if(evt.target.tagName !=='A'){
+      return;
+    }
+    menuPresenter.init();
+    movieListPresenter.init();
+  });*/
