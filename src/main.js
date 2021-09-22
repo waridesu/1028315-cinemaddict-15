@@ -48,20 +48,3 @@ export const filter = {
 movieListPresenter.init();
 
 menuPresenter.init();
-
-
-/*document.querySelector('.main-navigation__additional')
-  .addEventListener('click', ()=> {
-    movieListPresenter.destroy();
-    menuPresenter.destroy();
-    statisticPresenter.init();
-  });*/
-
-/*document.querySelector('.main-navigation__items')
-  .addEventListener('click', (evt) => {
-    if(evt.target.tagName !=='A'){
-      return;
-    }
-    menuPresenter.init();
-    movieListPresenter.init();
-  });*/
