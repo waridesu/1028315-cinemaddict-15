@@ -244,7 +244,7 @@ export default class MovieList {
       UserAction.ADD_COMMENT,
       UpdateType.MINOR,
       Object.assign({}, movie, {
-        text: movie.comments.push(comment),
+        comments:  movie.comments = [...movie.comments, comment],
       }));
   }
 
@@ -254,24 +254,10 @@ export default class MovieList {
       UserAction.DELETE_COMMENT,
       UpdateType.MINOR,
       Object.assign({}, movie, {
-        id: movie.id,
-        poster: movie.poster,
-        filmName: movie.filmName,
-        rating: movie.rating,
-        filmYear: movie.filmYear,
-        filmLength: movie.filmLength,
-        filmGenre: movie.filmGenre,
-        description: movie.description,
         comments: movie.comments = [
           ...movie.comments.slice(0, index),
           ...movie.comments.slice(index + 1),
-        ],
-        'user_details': {
-          'watchlist': movie.user_details.watchlist,
-          'alreadyWatched': movie.user_details.alreadyWatched,
-          'favorite': movie.user_details.favorite,
-        },
-      }));
+        ]}));
     return movie;
   }
 

@@ -216,7 +216,7 @@ export default class PopUp extends Smart {
 
   _clickDeleteHandler(evt) {
     this._scrollPositon = this.getElement().scrollTop;
-    if (!evt.target) {
+    if (evt.target.value === undefined) {
       return;
     }
     evt.preventDefault();
@@ -262,6 +262,6 @@ export default class PopUp extends Smart {
 
   setDeleteCommentHandler(callback) {
     this._callback.deleteComent = callback;
-    this.getElement().querySelector('.film-details__comment-delete').addEventListener('click', this._clickDeleteHandler);
+    this.getElement().querySelectorAll('.film-details__comment-delete').forEach((button) => button.addEventListener('click', this._clickDeleteHandler));
   }
 }
