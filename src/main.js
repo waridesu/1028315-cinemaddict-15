@@ -17,9 +17,8 @@ const statisticPresenter = new StatisticPresenter(siteMainElement, moviesModel, 
 const menuPresenter = new Filter(siteMainElement, moviesModel, filterModel);
 
 const movieListPresenter = new MoviePresenter(siteMainElement, moviesModel, filterModel);
-const backToList = (isEmpty) => {
-  if(isEmpty) {
-    movieListPresenter.destroy();
+const backToList = () => {
+  if(!document.querySelector('.films')) {
     movieListPresenter.init();
     menuPresenter.init();
     statisticPresenter.destroy();
@@ -29,16 +28,16 @@ const backToList = (isEmpty) => {
 export const filter = {
 
   [FilterType.ALL_MOVIES]: (movies) => {
-    backToList(!document.querySelector('.films'));
+    backToList();
     return movies;},
   [FilterType.WATCHLIST]: (movies) => {
-    backToList(!document.querySelector('.films'));
+    backToList();
     return movies.filter((movie)=> movie.user_details.watchlist);},
   [FilterType.HISTORY]: (movies) => {
-    backToList(!document.querySelector('.films'));
+    backToList();
     return movies.filter((movie)=> movie.user_details.alreadyWatched);},
   [FilterType.FAVORITES]: (movies) => {
-    backToList(!document.querySelector('.films'));
+    backToList();
     return movies.filter((movie)=> movie.user_details.favorite);},
   [FilterType.STATS]: ((movies) => {
     movieListPresenter.destroy();
