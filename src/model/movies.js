@@ -41,17 +41,7 @@ export default class Movies extends AbstractObserver {
   }
 
   // same here
-  deleteCommentary(updateType, update) {
-    const index = this._movies.findIndex((task) => task.id === update.id);
-
-    if (index === -1) {
-      throw new Error('Can\'t delete unexisting task');
-    }
-
-    this._movies = [
-      ...this._movies.slice(0, index),
-      ...this._movies.slice(index + 1),
-    ];
+  deleteCommentary(updateType) {
 
     this._notify(updateType);
   }

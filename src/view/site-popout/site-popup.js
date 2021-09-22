@@ -221,6 +221,7 @@ export default class PopUp extends Smart {
     }
     evt.preventDefault();
     this._callback.deleteComent(this._card, evt.target.value);
+    this.updateData(this._card);
   }
 
   setCloseButtonHandler(callback) {
@@ -262,6 +263,7 @@ export default class PopUp extends Smart {
 
   setDeleteCommentHandler(callback) {
     this._callback.deleteComent = callback;
-    this.getElement().querySelectorAll('.film-details__comment-delete').forEach((button) => button.addEventListener('click', this._clickDeleteHandler));
+    this.getElement().querySelectorAll('.film-details__comment-delete')
+      .forEach((button) => button.addEventListener('click', this._clickDeleteHandler));
   }
 }
