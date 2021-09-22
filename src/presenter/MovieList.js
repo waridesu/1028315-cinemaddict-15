@@ -111,10 +111,7 @@ export default class MovieList {
     this._filterType = this._filterModel.getFilter();
     const movies = this._moviesModel.getMovies();
     const filteredMovies = filter[this._filterType](movies);
-    const sortedMovies = sort[this._sortType](filteredMovies);
-
-
-    return sortedMovies;
+    return sort[this._sortType](filteredMovies);
   }
 
   _setAddToWatchList(movie) {
