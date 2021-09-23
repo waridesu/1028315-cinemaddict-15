@@ -3,6 +3,7 @@ import SiteMoreButtonView from '../view/site-more-button.js';
 import SiteFilmListView from '../view/site-film-container/film-list/film-list.js';
 import {remove, render, RenderPosition, replace} from '../view/utils/render';
 import FilmListSection from '../view/site-film-container/film-list-containers/film-section';
+import LoadingView from '../view/loading.js';
 import MoviePresenter from './Movie.js';
 import SitePopUpView from '../view/site-popout/site-popup';
 import {FilterType, SortType, UpdateType, UserAction} from '../view/utils/const';
@@ -13,7 +14,7 @@ import {filter} from '../main';
 const FILM_COUNT_PER_STEP = 5;
 
 export default class MovieList {
-  constructor(movieListContainer, moviesModel, filterModel) {
+  constructor(movieListContainer, moviesModel, filterModel, api) {
     this._moviesModel = moviesModel;
     this._movieListContainer = movieListContainer;
     this._renderMovieCount = FILM_COUNT_PER_STEP;
@@ -25,6 +26,9 @@ export default class MovieList {
     this._filmListSectionContainer = new SiteFilmListView();
     this._filterType = FilterType.ALL_MOVIES;
     this._filterModel = filterModel;
+    this._isLoading = true;
+    this._loadingComponent = new LoadingView();
+    this._api = api;
 
     this._moreButtonComponent = null;
     this._noMovieComponent = null;
@@ -84,7 +88,7 @@ export default class MovieList {
   _handleModelEvent(updateType, data) {
     switch (updateType) {
       case UpdateType.PATCH:
-        this._moviePresenter.get(data.id).init(data);
+        this._api.get(data.id).init(data);
         break;
       case UpdateType.MINOR:
         if (this._sitePopUp) {
@@ -101,6 +105,11 @@ export default class MovieList {
           this._closePopUp();
         }
         this._clearList({resetRenderedMovieCount: true, resetSortType: true, resetFilterType: true});
+        this._renderList();
+        break;
+      case UpdateType.INIT:
+        this._isLoading = false;
+        remove(this._loadingComponent);
         this._renderList();
         break;
     }
@@ -157,6 +166,10 @@ export default class MovieList {
       },
       ),
     );
+  }
+
+  _renderLoading() {
+    render(this._movieListContainer, this._loadingComponent, RenderPosition.AFTERBEGIN);
   }
 
   _handleSortTypeChange(sortType) {
@@ -276,6 +289,7 @@ export default class MovieList {
     this._moviePresenter.clear();
 
     remove(this._moreButtonComponent);
+    remove(this._loadingComponent);
 
     if (this._noMovieComponent) {
       remove(this._noMovieComponent);
@@ -298,6 +312,10 @@ export default class MovieList {
   }
 
   _renderList() {
+    if (this._isLoading) {
+      this._renderLoading();
+      return;
+    }
     const movies = this._getMovies();
     const movieCount = movies.length;
 

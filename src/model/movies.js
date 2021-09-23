@@ -6,8 +6,10 @@ export default class Movies extends AbstractObserver {
     this._movies = [];
   }
 
-  setMovies(movies){
+  setMovies(updateType, movies){
     this._movies = movies.slice();
+
+    this._notify(updateType);
   }
 
   getMovies(){
@@ -65,5 +67,26 @@ export default class Movies extends AbstractObserver {
       ...this._movies.slice(index + 1),
     ];
     this._notify(updateType);
+  }
+
+  static adaptToServer(movie) {
+    const adaptedMovie = Object.assign(
+      {},
+      movie.user_details,
+      {
+        'watchlist': movie.user_details.watchlist,
+        'already_watched': movie.user_details.watchlist.already_watched,
+        'watching_date': movie.user_details.watching_date instanceof Date ? movie.user_details.watching_date.toISOString() : null, // На сервере дата хранится в ISO формате
+        'favorite': movie.user_details.favorite,
+      },
+    );
+
+    // Ненужные ключи мы удаляем
+    delete adaptedMovie.user_details.watchlist;
+    delete adaptedMovie.user_details.watchlist.already_watched;
+    delete adaptedMovie.user_details.watching_date;
+    delete adaptedMovie.user_details.favorite;
+
+    return adaptedMovie;
   }
 }

@@ -1,22 +1,24 @@
-import {generateCard} from './view/mock/card-data.js';
 import MoviePresenter from './presenter/MovieList.js';
 import MoviesModel from './model/movies.js';
 import FilterModel from './model/filter.js';
 import Filter from './presenter/Filter.js';
 import StatisticPresenter from './presenter/Statistic';
-import {FilterType} from './view/utils/const';
+import {FilterType, UpdateType} from './view/utils/const';
+import Api from './api.js';
+
+const AUTHORIZATION = 'Basic hS3sfS14qjl2sa7j';
+const END_POINT = 'https://15.ecmascript.pages.academy/cinemaddict/';
+const api = new Api(END_POINT, AUTHORIZATION);
 
 
-const dataArray = new Array(20).fill().map(generateCard);
 const moviesModel = new MoviesModel();
-moviesModel.setMovies(dataArray);
 const filterModel = new FilterModel();
 
 const siteMainElement = document.querySelector('.main');
 const statisticPresenter = new StatisticPresenter(siteMainElement, moviesModel, filterModel);
-const menuPresenter = new Filter(siteMainElement, moviesModel, filterModel);
+const menuPresenter = new Filter(siteMainElement, moviesModel, filterModel, api);
 
-const movieListPresenter = new MoviePresenter(siteMainElement, moviesModel, filterModel);
+const movieListPresenter = new MoviePresenter(siteMainElement, moviesModel, filterModel, api);
 const backToList = () => {
   if(!document.querySelector('.films')) {
     movieListPresenter.init();
@@ -26,7 +28,6 @@ const backToList = () => {
 };
 
 export const filter = {
-
   [FilterType.ALL_MOVIES]: (movies) => {
     backToList();
     return movies;},
@@ -47,4 +48,13 @@ export const filter = {
 };
 movieListPresenter.init();
 
-menuPresenter.init();
+
+api.getMovies()
+  .then((tasks) => {
+    moviesModel.setMovies(UpdateType.INIT, tasks);
+
+    menuPresenter.init();
+  })
+  .catch(() => {
+    moviesModel.setMovies(UpdateType.INIT, []);
+  });

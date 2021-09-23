@@ -10,7 +10,6 @@ export default class Filter {
     this._filterContainer = filterContainer;
     this._moviesModel = moviesModel;
     this._filterModel = filterModel;
-
     this._filterComponent = null;
     this._sortComponent = null;
 
