@@ -13,7 +13,7 @@ const createSitePopUpTemplate = (movie, state) => `<section class="film-details"
       </div>
       <div class="film-details__info-wrap">
         <div class="film-details__poster">
-          <img class="film-details__poster-img" src="${movie.poster}" alt="">
+          <img class="film-details__poster-img" src="${movie.film_info.poster}" alt="">
 
           <p class="film-details__age">18+</p>
         </div>
@@ -21,12 +21,12 @@ const createSitePopUpTemplate = (movie, state) => `<section class="film-details"
         <div class="film-details__info">
           <div class="film-details__info-head">
             <div class="film-details__title-wrap">
-              <h3 class="film-details__title">${movie.filmName}</h3>
-              <p class="film-details__title-original">Original: The Great Flamarion</p>
+              <h3 class="film-details__title">${movie.film_info.title}</h3>
+              <p class="film-details__title-original">${movie.film_info.alternative_title}</p>
             </div>
 
             <div class="film-details__rating">
-              <p class="film-details__total-rating">${movie.rating}</p>
+              <p class="film-details__total-rating">${movie.film_info.total_rating}</p>
             </div>
           </div>
 
@@ -45,11 +45,11 @@ const createSitePopUpTemplate = (movie, state) => `<section class="film-details"
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Release Date</td>
-              <td class="film-details__cell">${movie.filmYear}</td>
+              <td class="film-details__cell">${dayjs(movie.film_info.release.date).format('YYYY')}</td>
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Runtime</td>
-              <td class="film-details__cell">${movie.filmLength}</td>
+              <td class="film-details__cell">${movie.film_info.runtime}</td>
             </tr>
             <tr class="film-details__row">
               <td class="film-details__term">Country</td>
@@ -58,12 +58,12 @@ const createSitePopUpTemplate = (movie, state) => `<section class="film-details"
             <tr class="film-details__row">
               <td class="film-details__term">Genres</td>
               <td class="film-details__cell">
-                ${createSiteGeneresTemplate(movie.filmGenre)}
+                ${createSiteGeneresTemplate(movie.film_info.genre)}
             </tr>
           </table>
 
           <p class="film-details__film-description">
-            ${movie.description}
+            ${movie.comments}
             </p>
         </div>
       </div>

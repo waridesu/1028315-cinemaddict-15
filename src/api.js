@@ -20,8 +20,7 @@ export default class Api {
 
   getMovies() {
     return this._load({url: 'movies'})
-      .then(Api.toJSON)
-      .then((movies) => movies.map(MovieModel.adaptToClient));
+      .then(Api.toJSON);
   }
 
   updateRaiting(movie) {
@@ -31,14 +30,12 @@ export default class Api {
       body: JSON.stringify(MovieModel.adaptToServer(movie)),
       headers: new Headers({'Content-Type': 'application/json'}),
     })
-      .then(Api.toJSON)
-      .then(MovieModel.adaptToClient);
+      .then(Api.toJSON);
   }
 
   getPopupComments(movie) {
     return this._load({url: `comments/${movie.id}`})
-      .then(Api.toJSON)
-      .then((movies) => movies.map(MovieModel.adaptToClient));
+      .then(Api.toJSON);
   }
 
   postComment(movie) {
@@ -48,8 +45,7 @@ export default class Api {
       body: JSON.stringify(MovieModel.adaptToServer(movie)),
       headers: new Headers({'Content-Type': 'application/json'}),
     })
-      .then(Api.toJSON)
-      .then(MovieModel.adaptToClient);
+      .then(Api.toJSON);
   }
 
   deleteComment(comment) {
@@ -59,8 +55,7 @@ export default class Api {
       body: JSON.stringify(MovieModel.adaptToServer(comment)),
       headers: new Headers({'Content-Type': 'application/json'}),
     })
-      .then(Api.toJSON)
-      .then(MovieModel.adaptToClient);
+      .then(Api.toJSON);
   }
 
   _load({

@@ -5,6 +5,7 @@ import Filter from './presenter/Filter.js';
 import StatisticPresenter from './presenter/Statistic';
 import {FilterType, UpdateType} from './view/utils/const';
 import Api from './api.js';
+import FooterAmount from './view/site-fotter';
 
 const AUTHORIZATION = 'Basic hS3sfS14qjl2sa7j';
 const END_POINT = 'https://15.ecmascript.pages.academy/cinemaddict/';
@@ -13,7 +14,7 @@ const api = new Api(END_POINT, AUTHORIZATION);
 
 const moviesModel = new MoviesModel();
 const filterModel = new FilterModel();
-
+const siteFotterAmount = new FooterAmount();
 const siteMainElement = document.querySelector('.main');
 const statisticPresenter = new StatisticPresenter(siteMainElement, moviesModel, filterModel);
 const menuPresenter = new Filter(siteMainElement, moviesModel, filterModel, api);
@@ -52,7 +53,7 @@ movieListPresenter.init();
 api.getMovies()
   .then((tasks) => {
     moviesModel.setMovies(UpdateType.INIT, tasks);
-
+    const siteFotterAmount = new FooterAmount(tasks);
     menuPresenter.init();
   })
   .catch(() => {
